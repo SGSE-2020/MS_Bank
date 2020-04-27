@@ -2,17 +2,28 @@
 
 
 
-# Bank
+# MS_Bank
 
-- Konto Auszug
+## Schnittstellen
 
-* Konto Managment
-* Kreditbeantragen
-* Ein/Auszahlung
+Zu Jedem MS mit Geld Anbindung.
 
+## Technologien
 
-
-## Schnitstellen
+* Frontend
+  * Angular, Redux, React
+* Backend
+  * Node
+* Datenbanken
+  * NewSQL (evtl. Google Spanner)
+* Programmiersprache#
+  * Python | Rust
+* Protokolle
+  * REST, WebSocket
+* Infrastruktur
+  * Docker
+* Architekturen
+  * Event-Driven Architecture,
 
 ## UserStories
 
@@ -40,7 +51,4 @@
 | Administrator | mir eine Liste von Kunden anzeigen die sich Geld leihen wollen | ich ihre Konten einsehen kann und ihn ein Darlehen gewähren kann. | Admin Zugriff | mittel |
 | Administrator | Kunden Konten einsehen | einen Überblick über die Kunden Konten habe | Admin Zugriff | hoch |
 | Administrator | Kunden Konten bearbeiten | der Kunde sein Konto einstellen kann | Admin Zugriff | hoch |
-|  | | |  |  |
-|  | | |  |  |
-|  | | |  |  |
 
