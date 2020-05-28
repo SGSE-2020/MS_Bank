@@ -1,0 +1,15 @@
+syntax = "proto3";
+package advisor;
+
+service AdvisorService {
+	rpc sendMessage(ContactRequest) returns (ContactResponse) {}
+}
+
+message ContactRequest {
+    string uid = 1;
+	string message = 2;
+}
+
+message ContactResponse {
+	string message = 1;
+}
