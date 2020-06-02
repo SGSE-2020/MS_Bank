@@ -1,0 +1,13 @@
+
+.title {
+  float: left;
+  background-color: #FF0000;
+}
+
+.middleContainer {
+  float: left;
+  position: top;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

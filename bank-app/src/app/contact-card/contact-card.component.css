@@ -1,0 +1,13 @@
+.card_content{
+  width: 100%;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+
+.main_container{
+  width: 800px;
+  height: auto;
+  border-radius: 10px;
+  border: 2px solid black;
+}

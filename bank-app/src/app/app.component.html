@@ -1,0 +1,20 @@
+<header>
+  <div>
+    <img src="../assets/logo.svg" alt="Example" width="40"> <label class="title">Wilkommen bei ihrer Bank</label>
+    <nav>
+      <ul>
+        <li><button routerLink="/">Übersicht</button></li>
+        <li><button routerLink="/account">Konto</button></li>
+        <li><button routerLink="/advisor">Kontakt</button></li>
+        <li><button routerLink="/settings">Einstellungen</button></li>
+        <li><button routerLink="/login">Login</button></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+  <router-outlet></router-outlet>
+  <app-nav></app-nav>
+  <app-contact-card></app-contact-card>
+</div>

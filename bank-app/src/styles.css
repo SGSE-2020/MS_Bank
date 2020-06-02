@@ -1,0 +1,145 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: lightgray;
+}
+
+.container {
+  width: 60%;
+  margin: auto;
+  padding: 10px;
+  background-color: white;
+  background-size:cover;
+  background-position: bottom center;
+	background-repeat: no-repeat;
+  background-attachment:fixed;
+  height: 100%;
+}
+
+.container div{
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+header {
+  background-color: #FF0000;
+  padding: 1em;
+  border-bottom: 1px solid black;
+  height: auto;
+  width: auto;
+}
+
+header a {
+  color: white;
+  text-decoration: none;
+}
+
+nav {
+  float: right;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  display: flex;
+}
+
+button {
+  border: none;
+  background: #FF0000;
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 1em;
+  font-size: 16px;
+  border-radius: 5px;
+  position: relative;
+  box-sizing: border-box;
+  transition: all 500ms ease;
+}
+
+button:hover{
+  color: #FF0000;
+  border: #FF0000 solid 1px;
+  background:#fff;
+}
+
+nav ul li button {
+  margin-left: 1em;
+}
+
+nav ul li button {
+  border: none;
+  background: #ff7a59;
+  color: #fff;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  position: relative;
+  box-sizing: border-box;
+  transition: all 500ms ease;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  text-align: center;
+
+  padding-left: auto;
+  padding-right: auto;
+  padding-top: auto;
+  padding-bottom: auto;
+}
+
+.main_container{
+  width: 800px;
+  height: auto;
+  border-radius: 10px;
+  border: 2px solid black;
+  padding-left: 1em;
+  padding-right: 1em;
+  background-color: white;
+}
+
+label {
+  font-size: 22pt;
+}
+
+.main_container h1{
+  text-align: center;
+  text-decoration: underline lightgray;
+}
+
+label textarea {
+  align-items: center;
+  display: flex;
+}
+
+input, select {
+  height: 22pt;
+  width: 100%;
+}
+
+p {
+  font-size: 18pt;
+}
+
+.header{
+  color: white;
+  height: 10%;
+  background-color: #FF0000;
+  width: 100%;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  padding-left: 1em;
+  border-radius: 10px left;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}

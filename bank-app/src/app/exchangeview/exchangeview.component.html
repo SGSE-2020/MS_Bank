@@ -1,0 +1,28 @@
+<div class="main_container">
+  <div class="header">
+    <label>Überweisungen</label>
+  </div>
+  <div style="width: 100%; display: flex;">
+    <form id="ueberweisungen" style="width: 50%;  padding-right: 1em;">
+        <label for="">Bitte wählen sie ihr Konto: <select name="Konto" id="account_select">
+          <option value="" disabled selected>Bitte auswählen</option>
+        </select></label>   <br />
+        <label for="">Name: <input type="text"></label><br />
+        <label for="">IBAN: <input type="text"></label><br />
+        <label for="">Betrag: <input type="text"></label><br />
+        <label for="">Verwendungszweck: <textarea name="" id="" rows="4" style="width: 100%;"></textarea></label><br />
+    </form>
+    <form action="" id="options" style="width: 50%; border-left: 2px solid lightgray; padding-left: 1em;">
+      <h1>Ausführungsoption</h1>
+      <label for="">Überweisungstermin: <input type="text"></label><br />
+      <label for="">Wollen sie diese Überweisung wiederholen? <select name="Wiederholungs Optionen" id="repeatable_options">
+        <option value="" disabled selected>Bitte auswählen</option>
+        <option value="">Täglich</option>
+        <option value="">Monatlich</option>
+        <option value="">Jährlich</option>
+      </select></label>
+    </form>
+  </div>
+
+  <button>Überweisen</button> <br />
+</div>
