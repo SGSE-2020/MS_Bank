@@ -6,6 +6,7 @@ var exchange = require("./routes/exchange");
 const gRpcServer = new mali();
 const accountProtoPath = path.resolve(__dirname, './proto/account.proto');
 const advisorProtoPath = path.resolve(__dirname, './proto/advisor.proto');
+const PORT = 8080;
 
 /*Firebase Initialization
 const firebase = require("firebase-admin");
@@ -67,6 +68,6 @@ app.get("/", (req, res) => {
 app.post("/", (req, res) => {
 });
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
     console.log("Rest server gestartet");
 });
