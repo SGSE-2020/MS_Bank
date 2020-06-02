@@ -4,7 +4,7 @@ package account;
 service AccountService {
 	rpc createAccount(AccountCreation) returns (Account) {}
 	rpc transfer(Transfer) returns (transferMessage) {}
-	rpc deleteAccount(AccountDeletion) returns (Status) {}
+	rpc deleteAccount(Account) returns (Status) {}
 }
 
 message UserId {
@@ -35,11 +35,6 @@ message Transfer {
 	string amount = 4;
 	string start_date = 5;
 	string repeat = 6;
-}
-
-message AccountDeletion {
-    string customerNr = 1;
-	string iban = 2;
 }
 
 message Status {

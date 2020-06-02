@@ -17,9 +17,8 @@ firebase.initializeApp({
 });*/
 //
 
-// gRPC
+// gRPC AccountService
 gRpcServer.addService(accountProtoPath, 'AccountService');
-gRpcServer.addService(advisorProtoPath, 'AdvisorService');
 
 function transfer (param) {
     param.res = {
@@ -32,12 +31,28 @@ function transfer (param) {
 
 function createAccount (param) {
     param.res = {
-        iban: "DE 4545 4544 5454 2555 20", 
-        customerNr: "213"
+        customerNr: "213",
+        iban: "DE 4545 4544 5454 2555 20"       
     };
 }
 
-gRpcServer.use({ transfer });
+function deleteAccount (param) {
+    param.res = {
+        status: "OK", 
+        message: "Ihr Account wurde gelöscht."
+    };
+}
+
+// AdvisorService
+gRpcServer.addService(advisorProtoPath, 'AdvisorService');
+
+function sendMessage (param) {
+    param.res = {
+        message: "Ein Berater wird sie Kontaktieren"
+    };
+}
+
+gRpcServer.use({ transfer, createAccount, deleteAccount, sendMessage });
 gRpcServer.start("0.0.0.0:50051");
 
 // Tests

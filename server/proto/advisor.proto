@@ -6,7 +6,7 @@ service AdvisorService {
 }
 
 message ContactRequest {
-    string uid = 1;
+    string customerNr = 1;
 	string message = 2;
 }
 
