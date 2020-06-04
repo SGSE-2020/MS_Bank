@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: ms-bank
+  name: ms-bank
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: ms-bank
+    spec:
+      containers:
+      - image: ms-bank-frontend
+        name: ms-bank-frontend
+        ports:
+        - containerPort: 80
+      - image: ms-bank-backend
+        name: ms-bank-backend
+        ports:
+        - containerPort: 8080
+        - containerPort: 50051
+      restartPolicy: Always
+status: {}
