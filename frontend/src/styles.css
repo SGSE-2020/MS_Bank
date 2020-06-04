@@ -143,3 +143,31 @@ p {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
+
+.negativeAmount{
+  color: red;
+}
+
+.positiveAmount{
+  color: green;
+}
+
+.account_template{
+  width: 100%;
+  height: 50;
+  display: flex;
+  margin-bottom: 1em;
+}
+
+.account_template div{
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  text-align: center;
+
+  padding-left: auto;
+  padding-right: auto;
+  padding-top: auto;
+  padding-bottom: auto;
+}
