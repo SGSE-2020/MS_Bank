@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+declare function addAccountSelect(): any;
+
 @Component({
   selector: 'app-accview',
   templateUrl: './accview.component.html',
@@ -10,6 +12,7 @@ export class AccviewComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    addAccountSelect();
   }
 
 }

@@ -1,0 +1,14 @@
+{
+    "list":[
+        {
+            "accountNr": "1",
+            "balance": "900,40",
+            "description": "Sparkonto"
+        },
+        {
+            "accountNr": "2",
+            "balance": "25000",
+            "description": "Firmenkonto"
+        }
+    ]
+}

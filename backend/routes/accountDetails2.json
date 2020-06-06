@@ -1,0 +1,34 @@
+{
+    "list":[
+        {
+            "amount": "-3214",
+            "purpose":"Lohn/Gehalt",
+            "dest_name":"Mitarbeiter 1",
+            "start_date": "01.05.2020"
+        },
+        {
+            "amount": "-200",
+            "purpose":"Bestellung",
+            "dest_name":"Supermarkt",
+            "start_date": "01.05.2020"
+        },
+        {
+            "amount": "-2000",
+            "purpose":"Bestellung",
+            "dest_name":"Supermarkt",
+            "start_date": "29.05.2020"
+        },
+        {
+            "amount": "-200",
+            "purpose":"Kartenzahlung",
+            "dest_name":"Supermarkt",
+            "start_date": "28.04.2020"
+        },
+        {
+            "amount": "-30",
+            "purpose":"Kartenzahlung",
+            "dest_name":"Supermarkt",
+            "start_date": "27.05.2020"
+        }
+    ]
+}
