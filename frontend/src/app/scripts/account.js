@@ -1,4 +1,5 @@
-var hostAdress = "http://localhost:8080";
+//var hostAdress = "http://localhost:8080";
+var hostAdress = "http://bank.dvess.network/api";
 var amount_list = [];
 var currency = " €";
 
@@ -24,7 +25,7 @@ function showAccountDetails(){
 }
 
 function addAccountDetailList(accountNr){
-  fetch('http://localhost:8080/accountDetails?accountNr='+accountNr, {
+  fetch(hostAdress + '/accountDetails?accountNr='+accountNr, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json'}
   }).then(response => response.json())
@@ -59,7 +60,7 @@ function addAccountDetailList(accountNr){
 }
 
 function addAccountSelect(){
-  fetch('http://localhost:8080/accountList', {
+  fetch(hostAdress+'/accountList', {
     method: 'GET'
   }).then(response => response.json())
     .then(result => {
