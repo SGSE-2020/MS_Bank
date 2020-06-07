@@ -3,12 +3,14 @@
         {
             "accountNr": "1",
             "balance": "900,40",
-            "description": "Sparkonto"
+            "description": "Sparkonto",
+            "iban": "DE 2314 1231 1231 1231 12"
         },
         {
             "accountNr": "2",
             "balance": "25000",
-            "description": "Firmenkonto"
+            "description": "Firmenkonto",
+            "iban": "DE 9898 7767 321 5454 17"
         }
     ]
 }

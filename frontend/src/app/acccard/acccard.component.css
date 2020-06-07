@@ -1,0 +1,15 @@
+.leftside{
+  width: 70%;
+  color: gray;
+  margin-left: 1em;
+  padding-left: 0em;
+}
+
+.rightside{
+  width: 30%;
+  float: right;
+}
+
+.overview_button{
+  width: 100%;
+}

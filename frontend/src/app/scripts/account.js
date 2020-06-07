@@ -2,6 +2,7 @@ var hostAdress = "http://localhost:8080";
 //var hostAdress = "http://bank.dvess.network/api";
 var amount_list = [];
 var currency = " €";
+var selected_account = 0;
 
 function showAccountDetails(){
   console.log("OnChange");
@@ -60,6 +61,10 @@ function addAccountDetailList(accountNr){
     .catch(error => {
       console.error('Error:', error);
   });
+
+  if(selected_account != 0){
+    document.getElementById("account_select").value = selected_account;
+  }
 }
 
 function dateParser(date){
@@ -104,7 +109,6 @@ function dateParser(date){
       date_string = date_string + " Dez";
       break;
   }
-
   return date_string;
 }
 
@@ -125,4 +129,47 @@ function addAccountSelect(){
     .catch(error => {
       console.error('Error:', error);
   });
+}
+
+function addAccountToView(){
+  fetch(hostAdress+'/accountList', {
+    method: 'GET'
+  }).then(response => response.json())
+    .then(result => {
+      console.log(result);
+      var panel = document.getElementById("account_panel");
+
+      for (var i in result.list){
+        var new_view = document.getElementById("account_view_template").cloneNode(true);
+        new_view.hidden = false;
+        new_view.id="";
+
+        new_view.querySelector("#account_description").innerHTML = result.list[i].description;
+        new_view.querySelector("#account_nr").innerHTML = result.list[i].iban;
+        // Muss noch ersetzt werden.
+        new_view.querySelector("#account_owner").innerHTML = "Fabian Husemann";
+        //
+
+        if(result.list[i].amount < 0){
+          new_view.querySelector("#account_amount").classList.add("negativeAmount");
+        }else {
+          new_view.querySelector("#account_amount").classList.add("positiveAmount");
+        }
+        new_view.querySelector("#account_amount").innerHTML = result.list[i].balance + currency;
+
+        new_view.querySelector("#account_button").setAttribute("routerLink", "/account");
+        //new_view.querySelector("#account_button").onclick = function(){choseAccountInSelect(result.list[i].accountNr)};
+        panel.appendChild(new_view);
+      }
+
+
+    })
+    .catch(error => {
+      console.error('Error:', error);
+  });
+}
+
+function choseAccountInSelect(accountNr){
+  selected_account=accountNr;
+  console.log(selected_account);
 }
