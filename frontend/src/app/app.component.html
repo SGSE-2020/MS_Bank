@@ -6,8 +6,9 @@
         <li><button routerLink="/">Übersicht</button></li>
         <li><button routerLink="/account">Konto</button></li>
         <li><button routerLink="/advisor">Kontakt</button></li>
-        <li><button routerLink="/settings">Einstellungen</button></li>
-        <li><button routerLink="/login">Login</button></li>
+        <li><button id="settingButton" hidden routerLink="/settings">Einstellungen</button></li>
+        <li><button id="loginButton" routerLink="/login">Login</button></li>
+        <li><button id="logoutButton" hidden onclick="logoutUser()">Logout</button></li>
       </ul>
     </nav>
   </div>

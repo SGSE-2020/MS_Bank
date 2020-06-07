@@ -1,3 +1,5 @@
+var user_name;
+
 $(document).ready(function () {
 
     //Firebase Initialisierung
@@ -22,7 +24,25 @@ function loginUser() {
                 //Token zu Bürgerbüro senden -> Uid zurückbekommen -> Dann User validiert
                 alert("Token ist:" + idToken);
                 console.log(firebase.auth().currentUser);
-                $('#user_loggedin').html(firebase.auth().currentUser.email);
+
+                user_name = firebase.auth().currentUser.displayName;
+                var login = document.getElementById("loginButton");
+                login.hidden = true;
+
+                var logout = document.getElementById("logoutButton");
+                logout.hidden = false;
+
+                var setting = document.getElementById("settingButton");
+                setting.innerHTML = user_name;
+                setting.hidden = false;
+
+                if(document.getElementById("login_view") !== null)
+                  document.getElementById("login_view").style = "display: none;";
+                if(document.getElementById("acc_view") !== null)
+                document.getElementById("acc_view").style = "";
+
+                document.getElementById("signinButton").hidden = true;
+                document.getElementById("signoutButton").hidden = false;
             }).catch(function(error) {
                 console.log(error);
             });
@@ -38,12 +58,29 @@ function loginUser() {
     } else {
         alert("Bitte Mail und Passwort eingeben");
     }
+
+
 };
 
 function logoutUser() {
 	firebase.auth().signOut().then(function() {
 		//Logout erfolgreich
-        $('#user_loggedin').html("Keiner eingeloggt");
+        user_name = undefined;
+        var login = document.getElementById("loginButton");
+        login.hidden = false;
+        var setting = document.getElementById("settingButton");
+        setting.hidden = true;
+
+        var logout = document.getElementById("logoutButton");
+        logout.hidden = true;
+
+        document.getElementById("signinButton").hidden = false;
+        document.getElementById("signoutButton").hidden = true;
+
+        if(document.getElementById("login_view") !== null)
+          document.getElementById("login_view").style = "";
+        if(document.getElementById("acc_view") !== null)
+          document.getElementById("acc_view").style = "display: none;";
 
 	}, function(error) {
 		alert("Logout fehlgeschlagen");
