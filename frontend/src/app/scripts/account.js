@@ -157,7 +157,7 @@ function addAccountToView(){
         }
         new_view.querySelector("#account_amount").innerHTML = result.list[i].balance + currency;
 
-        new_view.querySelector("#account_button").setAttribute("routerLink", "/account");
+        //new_view.querySelector("#account_button").setAttribute("routerLink", "/account");
         //new_view.querySelector("#account_button").onclick = function(){choseAccountInSelect(result.list[i].accountNr)};
         panel.appendChild(new_view);
       }

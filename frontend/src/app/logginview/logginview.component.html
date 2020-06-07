@@ -3,10 +3,12 @@
   <div class="header">
     <label>Login</label>
   </div>
-
+  <br />
+  <label>E-Mail:</label>
   <input type="text" placeholder="E-Mail" id="mail_signin">
+
+  <label>Passwort:</label>
   <input type="password" placeholder="Passwort" id="password_signin">
-  <button onclick="loginUser()">Sign In</button>
-  <button onclick="logoutUser()">Sign Out</button>
-  <p id="user_loggedin">Keiner eingeloggt</p>
+  <button id="signinButton" onclick="loginUser()">Sign In</button>
+  <button id="signoutButton" onclick="logoutUser()">Sign Out</button>
 </div>
