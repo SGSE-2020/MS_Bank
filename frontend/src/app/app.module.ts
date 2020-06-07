@@ -17,6 +17,7 @@ import { AccViewComponent } from './acc-view/acc-view.component';
 import { AdvisorviewComponent } from './advisorview/advisorview.component';
 import { SettingsviewComponent } from './settingsview/settingsview.component';
 import { LogginviewComponent } from './logginview/logginview.component';
+import { AcccardComponent } from './acccard/acccard.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { LogginviewComponent } from './logginview/logginview.component';
     AccViewComponent,
     AdvisorviewComponent,
     SettingsviewComponent,
-    LogginviewComponent
+    LogginviewComponent,
+    AcccardComponent
   ],
   imports: [
     BrowserModule,

@@ -10,10 +10,11 @@ import { ExchangeviewComponent } from './exchangeview/exchangeview.component';
 import { AdvisorviewComponent } from './advisorview/advisorview.component';
 import { SettingsviewComponent } from './settingsview/settingsview.component';
 import { LogginviewComponent } from './logginview/logginview.component';
-
+import { AcccardComponent } from './acccard/acccard.component';
 
 const routes: Routes = [
   { path: "./acc-view/acc-view.component", component: AccViewComponent},
+  { path: "./acccard/acccard.component", component: AcccardComponent},
   { path: "./contact-card/contact-card.component", component: ContactCardComponent},
   { path: "./nav/nav.component", component: NavComponent},
   { path: "./toolbar/toolbar.component", component: ToolbarComponent},
