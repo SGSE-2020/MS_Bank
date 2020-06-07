@@ -1,5 +1,5 @@
-//var hostAdress = "http://localhost:8080";
-var hostAdress = "http://bank.dvess.network/api";
+var hostAdress = "http://localhost:8080";
+//var hostAdress = "http://bank.dvess.network/api";
 var amount_list = [];
 var currency = " €";
 
@@ -39,6 +39,9 @@ function addAccountDetailList(accountNr){
         new_detail.hidden = false;
         new_detail.id = "";
 
+
+        new_detail.querySelector("#account_date").children[0].innerHTML = dateParser(result.list[i].start_date);
+
         if(result.list[i].amount < 0){
           new_detail.querySelector("#account_transfer_amount").children[0].classList.add("negativeAmount");
         }else {
@@ -57,6 +60,52 @@ function addAccountDetailList(accountNr){
     .catch(error => {
       console.error('Error:', error);
   });
+}
+
+function dateParser(date){
+  var date_array = date.split(".");
+
+  date_string = date_array[0];
+  switch(date_array[1]){
+    case "01":
+        date_string = date_string + " Jan";
+      break;
+    case "02":
+      date_string = date_string + " Feb";
+      break;
+    case "03":
+      date_string = date_string + " März";
+      break;
+    case "04":
+      date_string = date_string + " April";
+      break;
+    case "05":
+      date_string = date_string + " Mai";
+      break;
+    case "06":
+      date_string = date_string + " Juni";
+      break;
+    case "07":
+      date_string = date_string + " Juli";
+      break;
+    case "08":
+      date_string = date_string + " Aug";
+      break;
+    case "09":
+      date_string = date_string + " Okt";
+      break;
+    case "10":
+      date_string = date_string + " Sept";
+      break;
+    case "11":
+      date_string = date_string + " Nov";
+      break;
+    case "12":
+      date_string = date_string + " Dez";
+      break;
+  }
+
+  return date_string;
 }
 
 function addAccountSelect(){
