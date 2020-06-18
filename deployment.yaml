@@ -22,5 +22,16 @@ spec:
         ports:
         - containerPort: 8080
         - containerPort: 50051
+      - image: mongo
+        name: ms-bank-db
+        volumeMounts:
+          - mountPath: /data/db
+            name: db
+            subPath: bank-db
       restartPolicy: Always
+      volumes:
+        - name: db
+          gcePersistentDisk:
+            pdName: ms-bank
+            fsType: ext4
 status: {}
