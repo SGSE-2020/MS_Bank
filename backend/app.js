@@ -8,7 +8,6 @@ const gRpcServer = new mali();
 const accountProtoPath = path.resolve(__dirname, './proto/account.proto');
 const advisorProtoPath = path.resolve(__dirname, './proto/advisor.proto');
 const PORT = 8080;
-var cors = require('cors');
 
 const mongo = require('mongodb')
 const DB_URL = 'mongodb://localhost'
@@ -22,6 +21,14 @@ firebase.initializeApp({
     databaseURL: "https://smart-city-ss2020.firebaseio.com"
 });*/
 //
+
+app.use((req, res, next) => {
+    if (req.hostname == 'localhost' || req.hostname == '127.0.0.1') {
+        res.header('Access-Control-Allow-Origin', '*')
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    }
+    next()
+})
 
 // gRPC AccountService
 gRpcServer.addService(accountProtoPath, 'AccountService');
@@ -63,7 +70,6 @@ gRpcServer.start("0.0.0.0:50051");
 
 // Rest Service
 const app = express();
-app.use(cors());
 app.use(express.json());
 app.use("/", exchange);
 app.use("/", account);
