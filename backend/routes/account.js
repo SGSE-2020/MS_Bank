@@ -2,6 +2,10 @@ var express = require("express");
 var router = express.Router();
 var fs = require("fs");
 
+const mongo = require('mongodb')
+const DB_URL = 'mongodb://localhost'
+const mongo_client = mongo.MongoClient;
+
 router.get('/accountList', function(req, res, next) {
     var content = fs.readFileSync("routes/accountList.json");
     var jsonContent = JSON.parse(content);

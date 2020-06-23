@@ -1,0 +1,5 @@
+docker run --rm -p 27017:27017 -v ~/db:/data/db mongo
+
+nodemon app.js
+
+ng serve
