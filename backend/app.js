@@ -64,17 +64,17 @@ gRpcServer.start("0.0.0.0:50051");
 const app = express();
 
 app.use(express.json());
-app.use("/", exchange);
-app.use("/", account);
 
 app.use((req, res, next) => {
-    console.log(eq.hostname + "Juhu ");
+    console.log(req.hostname + "Juhu ");
     if (req.hostname == 'localhost' || req.hostname == '127.0.0.1') {
         res.header('Access-Control-Allow-Origin', '*')
         res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     }
     next()
 })
+app.use("/", exchange);
+app.use("/", account);
 
 app.get("/", (req, res) => {
     res.send("hallo");
