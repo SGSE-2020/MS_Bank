@@ -1,4 +1,4 @@
-FROM node
+FROM node:LTS
 EXPOSE 8080
 COPY . /app
 WORKDIR /app
