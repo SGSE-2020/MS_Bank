@@ -10,6 +10,9 @@ const advisorProtoPath = path.resolve(__dirname, './proto/advisor.proto');
 const PORT = 8080;
 var cors = require('cors');
 
+const mongo = require('mongodb')
+const DB_URL = 'mongodb://localhost'
+const mongo_client = mongo.MongoClient;
 /*Firebase Initialization
 const firebase = require("firebase-admin");
 const serviceAccount = require("./smartcity_servicekey.json");
@@ -81,3 +84,35 @@ app.post("/", (req, res) => {
 app.listen(PORT, () => {
     console.log("Rest server gestartet");
 });
+
+// Database Connect Test
+
+function mongo_connect(res, callback) {
+    mongo_client.connect(DB_URL, (err, db) => {
+        if (err) {
+            res.status(500).send({'error': 'Unable to connect to database.'})
+            console.error(err)
+        }
+        else {
+            callback(err, db.db('ms-bank'))
+            db.close()
+        }
+    })
+}
+
+rest.get('/setupDB', (req, res) => {
+    restaurant = {
+
+
+        
+    }
+    mongo_connect(res, (err, db) => {
+        db.collection(DB_RESTAURANTS).insertOne(restaurant, (err, db_res) => {
+            if (err) {
+                res.status(500).send({'error': err})
+            } else {
+                res.send()
+            }
+        })
+    })
+})

@@ -1,5 +1,5 @@
-//var hostAdress = "http://localhost:8080";
-var hostAdress = "http://bank.dvess.network/api";
+//var hostAdress = "https://localhost:8080";
+var hostAdress = "https://bank.dvess.network/api";
 var amount_list = [];
 var currency = " €";
 var selected_account = 0;
