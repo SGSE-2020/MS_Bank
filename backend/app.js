@@ -22,14 +22,6 @@ firebase.initializeApp({
 });*/
 //
 
-app.use((req, res, next) => {
-    if (req.hostname == 'localhost' || req.hostname == '127.0.0.1') {
-        res.header('Access-Control-Allow-Origin', '*')
-        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-    }
-    next()
-})
-
 // gRPC AccountService
 gRpcServer.addService(accountProtoPath, 'AccountService');
 
@@ -70,9 +62,20 @@ gRpcServer.start("0.0.0.0:50051");
 
 // Rest Service
 const app = express();
+
 app.use(express.json());
 app.use("/", exchange);
 app.use("/", account);
+
+app.use((req, res, next) => {
+    console.log(eq.hostname + "Juhu ");
+    if (req.hostname == 'localhost' || req.hostname == '127.0.0.1') {
+        res.header('Access-Control-Allow-Origin', '*')
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    }
+    next()
+})
+
 app.get("/", (req, res) => {
     res.send("hallo");
 });
@@ -86,6 +89,8 @@ app.get("/konto", (req, res) => {
 
 app.post("/", (req, res) => {
 });
+
+
 
 app.listen(PORT, () => {
     console.log("Rest server gestartet");
@@ -106,7 +111,7 @@ function mongo_connect(res, callback) {
     })
 }
 
-rest.get('/setupDB', (req, res) => {
+app.get('/setupDB', (req, res) => {
     restaurant = {
 
 
