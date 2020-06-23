@@ -23,4 +23,15 @@ router.get('/accountDetails', function(req, res, next) {
         res.send(jsonContent);
 });
 
+router.get('/createAccount/:id', function(req, res, next) {
+    var content;
+    if (req.query.accountNr === "1"){
+        content = fs.readFileSync("routes/accountDetails.json");  
+    } else if(req.query.accountNr === "2"){
+        content = fs.readFileSync("routes/accountDetails2.json"); 
+    }
+    var jsonContent = JSON.parse(content);
+        res.send(jsonContent);
+});
+
 module.exports = router;
