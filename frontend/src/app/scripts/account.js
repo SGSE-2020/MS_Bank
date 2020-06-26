@@ -1,5 +1,5 @@
-var hostAdress = "http://localhost:8080";
-//var hostAdress = "https://bank.dvess.network/api";
+//var hostAdress = "http://localhost:8080";
+var hostAdress = "https://bank.dvess.network/api";
 var amount_list = [];
 var currency = " €";
 var selected_account = 0;
@@ -106,7 +106,7 @@ function dateParser(date){
       break;
     case "12":
       date_string = date_string + " Dez";
-      break;
+      break;undefined
   }
   return date_string;
 }
