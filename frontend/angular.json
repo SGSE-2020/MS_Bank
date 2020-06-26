@@ -29,7 +29,8 @@
             "scripts": [
               "src/app/scripts/utils.js",
               "src/app/scripts/account.js",
-              "src/app/scripts/overview.js"
+              "src/app/scripts/overview.js",
+              "src/app/scripts/path.js"
             ]
           },
           "configurations": {
