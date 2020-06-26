@@ -1,5 +1,5 @@
-//var hostAdress = "http://localhost:8080";
-var hostAdress = "https://bank.dvess.network/api";
+var hostAdress = "http://localhost:8080";
+//var hostAdress = "https://bank.dvess.network/api";
 var amount_list = [];
 var currency = " €";
 var selected_account = 0;
@@ -131,6 +131,7 @@ function addAccountSelect(){
 }
 
 function addAccountToView(){
+  console.log("nein hier");
   fetch(hostAdress+'/accountList?id='+ "asdasdad2213", {
     method: 'GET'
   }).then(response => response.json())
@@ -139,6 +140,7 @@ function addAccountToView(){
       var panel = document.getElementById("account_panel");
 
       for (var i in result){
+        console.log(result);
         var new_view = document.getElementById("account_view_template").cloneNode(true);
         new_view.hidden = false;
         new_view.id="";
@@ -169,4 +171,25 @@ function addAccountToView(){
 function choseAccountInSelect(accountNr){
   selected_account=accountNr;
   console.log(selected_account);
+}
+
+function createAccount(){
+  console.log("Account erstellen");
+
+  var createObject = {};
+  createObject["description"] = document.getElementById("new_account_description").value;
+  createObject["user_id"] = token;
+  console.log(JSON.stringify(createObject))
+  
+  fetch(hostAdress + "/createAccount", {
+    method: 'POST', 
+    body: JSON.stringify(createObject)
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Success:', data);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
 }

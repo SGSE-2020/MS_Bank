@@ -1,5 +1,4 @@
 function isLogged(){
-  console.log(username);
   var panel = document.getElementById("main_panel");
   if(username === undefined){
     document.getElementById("login_view").style = "";
