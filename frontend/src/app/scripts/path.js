@@ -1,2 +1,2 @@
-var hostAdress = "http://localhost:8080";
-//var hostAdress = "/api";
+//var hostAdress = "http://localhost:8080";
+var hostAdress = "/api";
