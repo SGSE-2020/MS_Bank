@@ -26,10 +26,18 @@ router.get('/accountList', function(req, res, next) {
             if (err || result == null) {
                 res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})
             } else {       
-                //res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})    
+                //res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})
+                console.log(result.accounts);    
                 res.send(result.accounts)
             }
         })
+    })
+});
+
+router.get('/removeDB', function(req, res, next) {
+    var id = req.query.id;
+    mongo_connect(res, (err, db) => {
+        db.collection('customer').remove()
     })
 });
 
@@ -46,7 +54,7 @@ router.get('/accountDetails', function(req, res, next) {
 
 router.post('/createAccount', function(req, res, next) {
     console.log(req.body);
-    var user_id = req.body.user_id;
+    var user_id = req.cookies.token;
     var iban = getIban();
     var account_description = req.body.description;
 
