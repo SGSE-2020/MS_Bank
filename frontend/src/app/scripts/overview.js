@@ -1,7 +1,7 @@
 function isLogged(){
-  console.log(user_name);
+  console.log(username);
   var panel = document.getElementById("main_panel");
-  if(user_name === undefined){
+  if(username === undefined){
     document.getElementById("login_view").style = "";
     document.getElementById("acc_view").style = "display: none;";
   }else{
@@ -11,7 +11,7 @@ function isLogged(){
 }
 
 function logoutChecker(){
-  if(user_name !== undefined){
+  if(username !== undefined){
     document.getElementById("signinButton").hidden = true;
     document.getElementById("signoutButton").hidden = false;
   }else{

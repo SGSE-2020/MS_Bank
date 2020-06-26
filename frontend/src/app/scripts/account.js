@@ -1,5 +1,5 @@
-//var hostAdress = "http://localhost:8080";
-var hostAdress = "https://bank.dvess.network/api";
+var hostAdress = "http://localhost:8080";
+//var hostAdress = "https://bank.dvess.network/api";
 var amount_list = [];
 var currency = " €";
 var selected_account = 0;
@@ -27,8 +27,7 @@ function showAccountDetails(){
 
 function addAccountDetailList(accountNr){
   fetch(hostAdress + '/accountDetails?accountNr='+accountNr, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json'}
+    method: 'GET'
   }).then(response => response.json())
     .then(result => {
       var panel = document.getElementById("account_panel");
@@ -113,16 +112,16 @@ function dateParser(date){
 }
 
 function addAccountSelect(){
-  fetch(hostAdress+'/accountList', {
+  fetch(hostAdress+'/accountList?id='+ "asdasdad2213", {
     method: 'GET'
   }).then(response => response.json())
     .then(result => {
       var select = document.getElementById("account_select");
-      for (var i in result.list){
+      for (var i in result){
         var option = document.createElement("option");
-        option.value = result.list[i].accountNr;
-        option.text = result.list[i].description;
-        amount_list.push(result.list[i].balance);
+        option.value = result[i].accountNr;
+        option.text = result[i].description;
+        amount_list.push(result[i].balance);
         select.add(option);
       }
     })
@@ -132,33 +131,31 @@ function addAccountSelect(){
 }
 
 function addAccountToView(){
-  fetch(hostAdress+'/accountList', {
+  fetch(hostAdress+'/accountList?id='+ "asdasdad2213", {
     method: 'GET'
   }).then(response => response.json())
     .then(result => {
       console.log(result);
       var panel = document.getElementById("account_panel");
 
-      for (var i in result.list){
+      for (var i in result){
         var new_view = document.getElementById("account_view_template").cloneNode(true);
         new_view.hidden = false;
         new_view.id="";
 
-        new_view.querySelector("#account_description").innerHTML = result.list[i].description;
-        new_view.querySelector("#account_nr").innerHTML = result.list[i].iban;
+        new_view.querySelector("#account_description").innerHTML = result[i].description;
+        new_view.querySelector("#account_nr").innerHTML = result[i].iban;
         // Muss noch ersetzt werden.
         new_view.querySelector("#account_owner").innerHTML = "Fabian Husemann";
         //
 
-        if(result.list[i].amount < 0){
+        if(result[i].amount < 0){
           new_view.querySelector("#account_amount").classList.add("negativeAmount");
         }else {
           new_view.querySelector("#account_amount").classList.add("positiveAmount");
         }
-        new_view.querySelector("#account_amount").innerHTML = result.list[i].balance + currency;
+        new_view.querySelector("#account_amount").innerHTML = result[i].balance + currency;
 
-        //new_view.querySelector("#account_button").setAttribute("routerLink", "/account");
-        //new_view.querySelector("#account_button").onclick = function(){choseAccountInSelect(result.list[i].accountNr)};
         panel.appendChild(new_view);
       }
 
