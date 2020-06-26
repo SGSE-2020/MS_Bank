@@ -1,3 +1,5 @@
+const { Console } = require("console");
+
 var amount_list = [];
 var currency = " €";
 var selected_account = 0;
@@ -110,7 +112,7 @@ function dateParser(date){
 }
 
 function addAccountSelect(){
-  fetch(hostAdress+'/accountList?id='+ "asdasdad2213", {
+  fetch(hostAdress+'/accountList', {
     method: 'GET'
   }).then(response => response.json())
     .then(result => {
@@ -130,35 +132,40 @@ function addAccountSelect(){
 
 function addAccountToView(){
   console.log("nein hier");
-  fetch(hostAdress+'/accountList?id='+ "asdasdad2213", {
+  fetch(hostAdress+'/accountList', {
     method: 'GET'
   }).then(response => response.json())
     .then(result => {
       console.log(result);
-      var panel = document.getElementById("account_panel");
+      if(result.error == undefined){
+        var panel = document.getElementById("account_panel");
 
-      for (var i in result){
-        console.log(result);
-        var new_view = document.getElementById("account_view_template").cloneNode(true);
-        new_view.hidden = false;
-        new_view.id="";
+        for (var i in result){
+          console.log(result);
+          var new_view = document.getElementById("account_view_template").cloneNode(true);
+          new_view.hidden = false;
+          new_view.id="";
 
-        new_view.querySelector("#account_description").innerHTML = result[i].description;
-        new_view.querySelector("#account_nr").innerHTML = result[i].iban;
-        // Muss noch ersetzt werden.
-        new_view.querySelector("#account_owner").innerHTML = "Fabian Husemann";
-        //
+          new_view.querySelector("#account_description").innerHTML = result[i].description;
+          new_view.querySelector("#account_nr").innerHTML = result[i].iban;
+          // Muss noch ersetzt werden.
+          new_view.querySelector("#account_owner").innerHTML = "Fabian Husemann";
+          //
 
-        if(result[i].amount < 0){
-          new_view.querySelector("#account_amount").classList.add("negativeAmount");
-        }else {
-          new_view.querySelector("#account_amount").classList.add("positiveAmount");
+          if(result[i].amount < 0){
+            new_view.querySelector("#account_amount").classList.add("negativeAmount");
+          }else {
+            new_view.querySelector("#account_amount").classList.add("positiveAmount");
+          }
+          new_view.querySelector("#account_amount").innerHTML = result[i].balance + currency;
+
+          panel.appendChild(new_view);
         }
-        new_view.querySelector("#account_amount").innerHTML = result[i].balance + currency;
-
-        panel.appendChild(new_view);
+      }else{
+        console.log("neu anlegen");
+        document.getElementById("createAccountPanel").hidden = false;
+        document.getElementById("account_button").hidden = true;
       }
-
 
     })
     .catch(error => {
@@ -182,12 +189,11 @@ function createAccount(){
   fetch(hostAdress + "/createAccount", {
     method: 'POST', 
     body: JSON.stringify(createObject)
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Success:', data);
-  })
-  .catch((error) => {
+  }).then(response => response.text()
+  ).then(response => {
+    console.log(response);
+
+  }).catch((error) => {
     console.error('Error:', error);
   });
 }

@@ -27,10 +27,10 @@
               "src/styles.css"
             ],
             "scripts": [
+              "src/app/scripts/path.js",
               "src/app/scripts/utils.js",
               "src/app/scripts/account.js",
-              "src/app/scripts/overview.js",
-              "src/app/scripts/path.js"
+              "src/app/scripts/overview.js"            
             ]
           },
           "configurations": {
