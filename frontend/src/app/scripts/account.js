@@ -1,5 +1,3 @@
-var hostAdress = "http://localhost:8080";
-//var hostAdress = "https://bank.dvess.network/api";
 var amount_list = [];
 var currency = " €";
 var selected_account = 0;
@@ -180,7 +178,7 @@ function createAccount(){
   createObject["description"] = document.getElementById("new_account_description").value;
   createObject["user_id"] = token;
   console.log(JSON.stringify(createObject))
-  
+
   fetch(hostAdress + "/createAccount", {
     method: 'POST', 
     body: JSON.stringify(createObject)
