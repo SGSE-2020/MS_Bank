@@ -1,4 +1,6 @@
-var user_name;
+var user;
+var email;
+var username;
 
 $(document).ready(function () {
 
@@ -14,6 +16,12 @@ $(document).ready(function () {
     firebase.initializeApp(config);
 });
 
+
+
+/*
+    geraldgeizig@bank.com
+    geraldgeizig
+*/
 function loginUser() {
     var email = $('#mail_signin').val();
     var password = $('#password_signin').val();
@@ -22,27 +30,45 @@ function loginUser() {
         firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
             firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
                 //Token zu Bürgerbüro senden -> Uid zurückbekommen -> Dann User validiert
+
+
+                fetch('https://buergerbuero.dvess.network/api/user/verify/' + idToken, {
+                    method: 'POST'})
+                    .then(response => response.json()).then(json => {
+                    if (json && json.status == 'success') {
+                        user = firebase.auth().currentUser
+                        email = user.email
+                        username = user.displayName
+                        document.cookie = 'token=' + idToken + ';'
+
+                        var login = document.getElementById("loginButton");
+                        login.hidden = true;
+
+                        var logout = document.getElementById("logoutButton");
+                        logout.hidden = false;
+
+                        var setting = document.getElementById("settingButton");
+                        setting.innerHTML = username;
+                        setting.hidden = false;
+
+                        if(document.getElementById("login_view") !== null)
+                        document.getElementById("login_view").style = "display: none;";
+                        if(document.getElementById("acc_view") !== null)
+                        document.getElementById("acc_view").style = "";
+
+                        document.getElementById("signinButton").hidden = true;
+                        document.getElementById("signoutButton").hidden = false;
+                    } else {
+                        alert("Dieser Nutzer konnte nicht verifiziert werden")
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                    alert("Dieser Nutzer konnte nicht verifiziert werden")
+                })
+
+
                 alert("Token ist:" + idToken);
                 console.log(firebase.auth().currentUser);
-
-                user_name = firebase.auth().currentUser.displayName;
-                var login = document.getElementById("loginButton");
-                login.hidden = true;
-
-                var logout = document.getElementById("logoutButton");
-                logout.hidden = false;
-
-                var setting = document.getElementById("settingButton");
-                setting.innerHTML = user_name;
-                setting.hidden = false;
-
-                if(document.getElementById("login_view") !== null)
-                  document.getElementById("login_view").style = "display: none;";
-                if(document.getElementById("acc_view") !== null)
-                document.getElementById("acc_view").style = "";
-
-                document.getElementById("signinButton").hidden = true;
-                document.getElementById("signoutButton").hidden = false;
             }).catch(function(error) {
                 console.log(error);
             });
@@ -70,7 +96,7 @@ function logoutUser() {
         login.hidden = false;
         var setting = document.getElementById("settingButton");
         setting.hidden = true;
-
+        document.cookie = "token=;"
         var logout = document.getElementById("logoutButton");
         logout.hidden = true;
 

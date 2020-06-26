@@ -1,28 +1,39 @@
 const express = require("express");
 const bodyParser = require('body-parser');
 const path = require('path');
-const mali = require('mali');
 var exchange = require("./routes/exchange");
 var account = require("./routes/account");
+
+const mali = require('mali');
+const grpc_module = require('grpc');
+const protoLoader = require('@grpc/proto-loader');
+const cookieParser = require('cookie-parser');
+const GRPC_PORT = 50051
+
 const gRpcServer = new mali();
 const accountProtoPath = path.resolve(__dirname, './proto/account.proto');
 const advisorProtoPath = path.resolve(__dirname, './proto/advisor.proto');
 const PORT = 8080;
 
+const USER_PROTO = path.resolve(__dirname, './proto/user.proto');
+const PACKAGE_DEFINITION = protoLoader.loadSync(
+    USER_PROTO,
+    {
+        keepCase: true,
+        longs: String,
+        enums: String,
+        defaults: true,
+        oneofs: true
+    }
+)
+
+const PCKG_DEF_OBJ = grpc_module.loadPackageDefinition(PACKAGE_DEFINITION)
+const user_route = PCKG_DEF_OBJ.user
+
 const mongo = require('mongodb')
 const DB_URL = 'mongodb://localhost'
 const mongo_client = mongo.MongoClient;
-/*Firebase Initialization
-const firebase = require("firebase-admin");
-const serviceAccount = require("./smartcity_servicekey.json");
 
-firebase.initializeApp({
-    credential: firebase.credential.cert(serviceAccount),
-    databaseURL: "https://smart-city-ss2020.firebaseio.com"
-});*/
-//
-
-// gRPC AccountService
 gRpcServer.addService(accountProtoPath, 'AccountService');
 
 function transfer (param) {
@@ -64,15 +75,41 @@ gRpcServer.start("0.0.0.0:50051");
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use((req, res, next) => {
-    console.log(req.hostname + "Juhu ");
     if (req.hostname == 'localhost' || req.hostname == '127.0.0.1') {
         res.header('Access-Control-Allow-Origin', '*')
         res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     }
     next()
 })
+
+app.use('/', (req, res, next) => {
+    console.log(req.cookies.token);
+    if (res.cookies && res.cookies.uid) {
+        res.status(400).send({'error': 'uid cookie not allowed'})
+    } else {        
+        user_token = {
+            token: req.cookies.token
+        }
+        conn = new user_route.UserService('ms-buergerbuero:50051', grpc_module.credentials.createInsecure())
+        conn.verifyUser(user_token, (err, feature) => {
+            if (err) {
+                res.status(401).send({'error': err})
+            } else {
+                if (feature.uid && feature.uid != "") {
+                    req.cookies.uid = feature.uid
+                    next()
+                } else {
+                    res.status(401).send({'error': 'Benutzerverifizierung fehlgeschlagen'})
+                }
+            }
+        })
+        
+    }
+})
+
 app.use("/", exchange);
 app.use("/", account);
 
