@@ -12,7 +12,7 @@ export class AcccardComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    addAccountToView();
+    //addAccountToView();
   }
 
 }

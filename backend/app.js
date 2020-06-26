@@ -85,7 +85,7 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use('/', (req, res, next) => {
+/*app.use('/', (req, res, next) => {
     console.log(req.cookies.token);
     if (res.cookies && res.cookies.uid) {
         res.status(400).send({'error': 'uid cookie not allowed'})
@@ -108,7 +108,7 @@ app.use('/', (req, res, next) => {
         })
         
     }
-})
+})*/
 
 app.use("/", exchange);
 app.use("/", account);

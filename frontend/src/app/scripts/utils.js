@@ -1,6 +1,7 @@
 var user;
 var email;
 var username;
+var token;
 
 $(document).ready(function () {
 
@@ -39,6 +40,7 @@ function loginUser() {
                         user = firebase.auth().currentUser
                         email = user.email
                         username = user.displayName
+                        token = idToken;
                         document.cookie = 'token=' + idToken + ';'
 
                         var login = document.getElementById("loginButton");
@@ -55,7 +57,7 @@ function loginUser() {
                         document.getElementById("login_view").style = "display: none;";
                         if(document.getElementById("acc_view") !== null)
                         document.getElementById("acc_view").style = "";
-
+                        addAccountToView();
                         document.getElementById("signinButton").hidden = true;
                         document.getElementById("signoutButton").hidden = false;
                     } else {
@@ -67,7 +69,7 @@ function loginUser() {
                 })
 
 
-                alert("Token ist:" + idToken);
+                console.log("Token ist:" + idToken);
                 console.log(firebase.auth().currentUser);
             }).catch(function(error) {
                 console.log(error);
