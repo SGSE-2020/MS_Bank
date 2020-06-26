@@ -1,2 +1,2 @@
-/node_modules/*
-frontend/src/app/scripts/path.js
+node_modules/*
+scripts/path.js
