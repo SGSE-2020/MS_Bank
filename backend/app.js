@@ -38,16 +38,22 @@ gRpcServer.addService(accountProtoPath, 'AccountService');
 
 function transfer (param) {
     param.res = {
-        status: "asdasd", 
-        customerNr: "213",
+        status: "Ok", 
+        user_token: "213",
         lastname: "Husemannn",
-        message: "hallo"
+        message: "Sie haben Geld an deinen Anderen Benutzer gesendet."
+    };
+}
+
+function getIban (param) {
+    param.res = {
+        iban: "DE 4545 4544 5454 2555 20"
     };
 }
 
 function createAccount (param) {
     param.res = {
-        customerNr: "213",
+        user_token: "213",
         iban: "DE 4545 4544 5454 2555 20"       
     };
 }
@@ -68,14 +74,14 @@ function sendMessage (param) {
     };
 }
 
-gRpcServer.use({ transfer, createAccount, deleteAccount, sendMessage });
+gRpcServer.use({ transfer, createAccount, deleteAccount, sendMessage, getIban });
 gRpcServer.start("0.0.0.0:50051");
 
 // Rest Service
-const app = express();
+var app = express();
 
-app.use(express.json());
 app.use(cookieParser());
+app.use(express.json());
 
 app.use((req, res, next) => {
     if (req.hostname == 'localhost' || req.hostname == '127.0.0.1') {
@@ -110,6 +116,7 @@ app.use((req, res, next) => {
     }
 })*/
 
+
 app.use("/", exchange);
 app.use("/", account);
 
@@ -123,11 +130,6 @@ app.get("/konto", (req, res) => {
     var jsonContent = JSON.parse(content);
     res.send(jsonContent);
 });
-
-app.post("/", (req, res) => {
-});
-
-
 
 app.listen(PORT, () => {
     console.log("Rest server gestartet");

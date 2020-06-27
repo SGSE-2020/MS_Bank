@@ -1,5 +1,3 @@
-const { Console } = require("console");
-
 var amount_list = [];
 var currency = " €";
 var selected_account = 0;
@@ -112,8 +110,13 @@ function dateParser(date){
 }
 
 function addAccountSelect(){
-  fetch(hostAdress+'/accountList', {
-    method: 'GET'
+  console.log(token);
+  var json = {};
+  json["token"] = token;
+  
+  fetch(hostAdress+'/accountList/' + token, {
+    method: 'GET',
+    credentials: "same-origin"
   }).then(response => response.json())
     .then(result => {
       var select = document.getElementById("account_select");
@@ -133,7 +136,8 @@ function addAccountSelect(){
 function addAccountToView(){
   console.log("nein hier");
   fetch(hostAdress+'/accountList', {
-    method: 'GET'
+    method: 'GET',
+    credentials: "same-origin"
   }).then(response => response.json())
     .then(result => {
       console.log(result);
@@ -188,6 +192,7 @@ function createAccount(){
 
   fetch(hostAdress + "/createAccount", {
     method: 'POST', 
+    credentials: "same-origin",
     body: JSON.stringify(createObject)
   }).then(response => response.text()
   ).then(response => {

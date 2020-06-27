@@ -20,7 +20,8 @@ function mongo_connect(res, callback) {
 }
 
 router.get('/accountList', function(req, res, next) {
-    var id = req.query.id;
+    console.log(req.cookies.token);
+    var id = req.cookies.token;
     mongo_connect(res, (err, db) => {
         db.collection('customer').findOne({user_id: id}, (err, result) => {
             if (err || result == null) {
@@ -35,9 +36,9 @@ router.get('/accountList', function(req, res, next) {
 });
 
 router.get('/removeDB', function(req, res, next) {
-    var id = req.query.id;
     mongo_connect(res, (err, db) => {
         db.collection('customer').remove()
+        res.status(200);
     })
 });
 
@@ -53,7 +54,7 @@ router.get('/accountDetails', function(req, res, next) {
 });
 
 router.post('/createAccount', function(req, res, next) {
-    console.log(req.body);
+    console.log(req.cookies.token);
     var user_id = req.cookies.token;
     var iban = getIban();
     var account_description = req.body.description;

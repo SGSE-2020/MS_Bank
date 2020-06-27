@@ -18,7 +18,6 @@ $(document).ready(function () {
 });
 
 
-
 /*
     geraldgeizig@bank.com
     geraldgeizig
@@ -31,7 +30,6 @@ function loginUser() {
         firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
             firebase.auth().currentUser.getIdToken(true).then(function(idToken) {
                 //Token zu Bürgerbüro senden -> Uid zurückbekommen -> Dann User validiert
-
 
                 fetch('https://buergerbuero.dvess.network/api/user/verify/' + idToken, {
                     method: 'POST'})
