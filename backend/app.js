@@ -39,7 +39,7 @@ gRpcServer.addService(accountProtoPath, 'AccountService');
 function transfer (param) {
     param.res = {
         status: "Ok", 
-        user_token: "213",
+        user_id: "213",
         lastname: "Husemannn",
         message: "Sie haben Geld an deinen Anderen Benutzer gesendet."
     };
@@ -53,7 +53,7 @@ function getIban (param) {
 
 function createAccount (param) {
     param.res = {
-        user_token: "213",
+        user_id: "213",
         iban: "DE 4545 4544 5454 2555 20"       
     };
 }

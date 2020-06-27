@@ -9,28 +9,28 @@ service AccountService {
 }
 
 message UserId {
-    string user_token = 1;
+    string user_id = 1;
 }
 
 message AccountCreation {
-    string user_token = 1;
+    string user_id = 1;
 	string description = 2;
 }
 
 message Account {
-    string user_token = 1;
+    string user_id = 1;
 	string iban = 2;
 }
 
 message transferMessage {
 	string status = 1;
-	string user_token = 2;
+	string user_id = 2;
 	string lastname = 3;
     string message = 5;
 }
 
 message Transfer {
-	string user_token = 7;
+	string user_id = 7;
 	string iban = 1;
 	string purpose = 2;
 	string dest_iban = 3;
