@@ -110,11 +110,11 @@ function dateParser(date){
 }
 
 function addAccountSelect(){
-  console.log(token);
+  console.log(uid);
   var json = {};
-  json["token"] = token;
+  json["user_id"] = uid;
   
-  fetch(hostAdress+'/accountList/' + token, {
+  fetch(hostAdress+'/accountList/' + uid, {
     method: 'GET',
     credentials: "same-origin"
   }).then(response => response.json())
@@ -122,7 +122,7 @@ function addAccountSelect(){
       var select = document.getElementById("account_select");
       for (var i in result){
         var option = document.createElement("option");
-        option.value = result[i].accountNr;
+        option.value = result[i].iban;
         option.text = result[i].description;
         amount_list.push(result[i].balance);
         select.add(option);
@@ -134,18 +134,15 @@ function addAccountSelect(){
 }
 
 function addAccountToView(){
-  console.log("nein hier");
-  fetch(hostAdress+'/accountList', {
+  fetch(hostAdress+'/accountList/'+uid, {
     method: 'GET',
     credentials: "same-origin"
   }).then(response => response.json())
     .then(result => {
-      console.log(result);
       if(result.error == undefined){
         var panel = document.getElementById("account_panel");
 
         for (var i in result){
-          console.log(result);
           var new_view = document.getElementById("account_view_template").cloneNode(true);
           new_view.hidden = false;
           new_view.id="";
@@ -187,12 +184,119 @@ function createAccount(){
 
   var createObject = {};
   createObject["description"] = document.getElementById("new_account_description").value;
-  createObject["user_id"] = token;
+  createObject["user_id"] = uid;
   console.log(JSON.stringify(createObject))
 
   fetch(hostAdress + "/createAccount", {
     method: 'POST', 
-    credentials: "same-origin",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(createObject)
+  }).then(response => response.text()
+  ).then(response => {
+    console.log(response);
+
+  }).catch((error) => {
+    console.error('Error:', error);
+  });
+}
+
+function updateAccount(){
+  var createObject = {};
+  createObject["description"] = document.getElementById("new_account_description2").value;
+  createObject["user_id"] = uid;
+  console.log(JSON.stringify(createObject))
+
+  fetch(hostAdress + "/updateAccount", {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(createObject)
+  }).then(response => response.text()
+  ).then(response => {
+    console.log(response);
+
+  }).catch((error) => {
+    console.error('Error:', error);
+  });
+}
+
+function checkTransferInput(){
+  var status = true;
+  var error_msg = "";
+
+  // Plicht
+  var select = document.getElementById("account_select");
+  var iban = select.options[select.selectedIndex].value;
+  var porpose = document.getElementById("porpose").value;
+  var dest_name = document.getElementById("dest_name").value;
+  var dest_iban = document.getElementById("dest_iban").value;
+  var amount =  document.getElementById("amount").value;
+
+  //Optional
+  var start_date = document.getElementById("start_date").value;
+  var repeat_select = document.getElementById("repeatable_options");
+  var repeat = repeat_select.options[repeat_select.selectedIndex].value;
+
+  // Checkt alle wichtigen Eingaben
+  if(dest_name==""){
+    error_msg += "Es wurde kein Begünstigtenname angegeben. <br /> ";
+    status = false;
+  }
+  if(iban==""){
+    error_msg += "Die IBAN des Begünstigten nicht eingetragen. <br /> ";
+    status = false;
+  }
+  if(amount==""){
+    error_msg += "Es wurde kein Geldbetrag eingegeben. <br /> ";
+    status = false;
+  }
+  if(amount<=0){
+    error_msg += "Es wurde ein ungültiger Geldbetrag eingegeben. <br /> ";
+    status = false;
+  }
+  if(porpose==""){
+    error_msg += "Es wurde kein Verwendungszweck angegeben. <br /> ";
+    status = false;
+  }
+  
+  var createObject = {};
+  createObject["user_id"] = uid;
+  createObject["iban"] = iban;
+  createObject["purpose"] = porpose;
+  createObject["dest_name"] = dest_name;
+  createObject["dest_iban"] = dest_iban;
+  createObject["amount"] = amount;
+
+  // Checkt alle Optionalen Eingaben
+  if(start_date != ""){
+    createObject["start_date"] = start_date;
+  }
+
+  if(repeat != "Bitte auswählen" && repeat != ""){
+    createObject["repeat"] = repeat;
+  }
+  // existiert die iban überhaupt?
+
+  if(status){
+    createTransfer(createObject)
+  }else
+    alert(error_msg);
+}
+
+function createTransfer(createObject){
+  console.log(JSON.stringify(createObject))
+
+  fetch(hostAdress + "/createTransfer", {
+    method: 'POST', 
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(createObject)
   }).then(response => response.text()
   ).then(response => {

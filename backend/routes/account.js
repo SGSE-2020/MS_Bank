@@ -19,16 +19,17 @@ function mongo_connect(res, callback) {
     })
 }
 
-router.get('/accountList', function(req, res, next) {
-    console.log(req.cookies.token);
-    var id = req.cookies.token;
+router.get('/accountList/:uid', function(req, res, next) {
+    var id = req.params.uid;
+    console.log(id);
     mongo_connect(res, (err, db) => {
         db.collection('customer').findOne({user_id: id}, (err, result) => {
             if (err || result == null) {
                 res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})
             } else {       
                 //res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})
-                console.log(result.accounts);    
+                console.log(result);  
+                console.log("TransferList "+result.accounts[0].transfer[0].own_iban);      
                 res.send(result.accounts)
             }
         })
@@ -54,8 +55,7 @@ router.get('/accountDetails', function(req, res, next) {
 });
 
 router.post('/createAccount', function(req, res, next) {
-    console.log(req.cookies.token);
-    var user_id = req.cookies.token;
+    var id = req.body.user_id;
     var iban = getIban();
     var account_description = req.body.description;
 
@@ -66,14 +66,14 @@ router.post('/createAccount', function(req, res, next) {
     account["balance"] = "0";
     account["description"] = account_description;
     account["iban"] = iban;
+    account["transfer"] = [];
 
     var customer = {};
-    customer["user_id"] = user_id;
+    customer["user_id"] = id;
     customer["advisor_id"] = advisor_id;
     customer["accounts"] = [account];
 
-    console.log(customer);
-
+    //console.log(customer);
     mongo_connect(res, (err, db) => {
         db.collection("customer").insertOne(customer, (err, db_res) => {
             if (err) {
@@ -86,6 +86,30 @@ router.post('/createAccount', function(req, res, next) {
 
     res.end("Ihr Account wurde erstellt. Ihre neue IBAN:" + iban);
 });
+
+router.post('/updateAccount', function(req, res, next) {
+    var id = req.body.user_id;
+    var account_description = req.body.description;
+    var iban = getIban();
+    var account = {};
+    account["balance"] = "0";
+    account["description"] = account_description;
+    account["iban"] = iban;
+
+    mongo_connect(res, (err, db) => {
+        db.collection("customer").update({ user_id: id},
+            { $addToSet:
+               {
+                 "accounts": account              
+               }
+            }
+         )
+    })
+
+    res.end("Ihr Account wurde erstellt. Ihre neue IBAN:" + iban);
+});
+
+
 
 function getAdvisor(){
     var advisor_nr = 1;

@@ -83,12 +83,16 @@ var app = express();
 app.use(cookieParser());
 app.use(express.json());
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 app.use((req, res, next) => {
     if (req.hostname == 'localhost' || req.hostname == '127.0.0.1') {
-        res.header('Access-Control-Allow-Origin', '*')
-        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     }
-    next()
+    next();
 })
 
 /*app.use('/', (req, res, next) => {
