@@ -2,6 +2,8 @@ var user;
 var email;
 var username;
 var token;
+var uid;
+var lastname;
 
 $(document).ready(function () {
 
@@ -36,10 +38,11 @@ function loginUser() {
                     .then(response => response.json()).then(json => {
                     if (json && json.status == 'success') {
                         user = firebase.auth().currentUser
+                        uid = user.uid;
                         email = user.email
                         username = user.displayName
                         token = idToken;
-                        document.cookie = 'token=' + idToken + ';'
+                        document.cookie = 'uid=' + uid + ';'
 
                         var login = document.getElementById("loginButton");
                         login.hidden = true;
@@ -65,10 +68,6 @@ function loginUser() {
                     console.log(error)
                     alert("Dieser Nutzer konnte nicht verifiziert werden")
                 })
-
-
-                console.log("Token ist:" + idToken);
-                console.log(firebase.auth().currentUser);
             }).catch(function(error) {
                 console.log(error);
             });
