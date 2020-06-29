@@ -43,15 +43,20 @@ router.get('/removeDB', function(req, res, next) {
     })
 });
 
-router.get('/accountDetails', function(req, res, next) {
-    var content;
-    if (req.query.accountNr === "1"){
-        content = fs.readFileSync("routes/accountDetails.json");  
-    } else if(req.query.accountNr === "2"){
-        content = fs.readFileSync("routes/accountDetails2.json"); 
-    }
-    var jsonContent = JSON.parse(content);
-        res.send(jsonContent);
+router.get('/accountDetails/:iban/:uid', function(req, res, next) {
+    var iban = req.params.iban;
+    var uid = req.params.uid;
+
+    mongo_connect(res, (err, db) => {
+        db.collection('customer').findOne({user_id: uid}, (err, result) => {
+            if (err || result == null) {
+                res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})
+            } else {       
+                //res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})   
+                res.send(result.accounts)
+            }
+        })
+    })
 });
 
 router.post('/createAccount', function(req, res, next) {
