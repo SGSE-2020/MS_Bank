@@ -27,22 +27,13 @@ router.post('/createTransfer', function(req, res, next) {
     console.log("CreateTransfer");
     var id = req.body.user_id;
     var own_iban = req.body.iban;
-
-    var transfer = {};
-    transfer["own_iban"] = own_iban;
-    transfer["purpose"] = req.body.purpose;
-    transfer["dest_name"] = req.body.dest_name;
-    transfer["dest_iban"] = req.body.dest_iban;
-    transfer["amount"] = req.body.amount;
-    transfer["start_date"] = req.body.start_date;
-    transfer["repeats"] = req.body.repeat;
+    var amount = req.body.amount;
 
     var status = true;
     var counter = 0;
     mongo_connect(res, (err, db) => {
         db.collection('customer').findOne({user_id: id}, (err, result) => {
             if (err || result == null) {
-                console.log("Error?");
                 res.status(404).send({'error': 'Kein Account mit der id: ' + id + ' gefunden'})
                 status = false;
             } else {     
@@ -58,7 +49,7 @@ router.post('/createTransfer', function(req, res, next) {
                                         "purpose": req.body.purpose,
                                         "dest_name": req.body.dest_name,
                                         "dest_iban": req.body.dest_iban,
-                                        "amount": req.body.amount,
+                                        "amount": "-" + amount,
                                         "start_date": req.body.start_date,
                                         "repeats": req.body.repeat  
                                      }          
@@ -67,10 +58,26 @@ router.post('/createTransfer', function(req, res, next) {
                              )
                         })
 
+                        mongo_connect(res, (err, db) => {
+                            db.collection("customer").update({ "user_id": id, "accounts.iban": dest_iban},
+                                { $push:
+                                   {
+                                     "accounts.$.transfer": {
+                                        "own_iban": own_iban,
+                                        "purpose": req.body.purpose,
+                                        "dest_name": req.body.dest_name,
+                                        "dest_iban": req.body.dest_iban,
+                                        "amount": amount,
+                                        "start_date": req.body.start_date,
+                                        "repeats": req.body.repeat  
+                                     }          
+                                   }
+                                }
+                             )
+                        })
                     }else {
-                        console.log("ELSE?");
                         counter++;
-                        if(counter == result.accounts.length)
+                        if(counter == result.accounts.size())
                             res.end("Sie haben keinen Zugriff auf das angegebene Konto");
                     }
                 }
@@ -78,7 +85,6 @@ router.post('/createTransfer', function(req, res, next) {
         })
     })
 
-    console.log(transfer);
     if(status)
         res.end("Die Überweisung war erfolgreich.");
 });

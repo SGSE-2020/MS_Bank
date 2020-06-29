@@ -3,11 +3,10 @@ var currency = " €";
 var selected_account = 0;
 
 function showAccountDetails(){
-  console.log("OnChange");
   var select = document.getElementById("account_select");
-
   var panel = document.getElementById("account_panel");
   var detail_template = document.getElementById("account_template").cloneNode(true);
+
   while (panel.firstChild) {
     panel.removeChild(panel.lastChild);
   }
@@ -23,11 +22,12 @@ function showAccountDetails(){
   document.getElementById("account_amount").innerHTML = amount_list[select.selectedIndex-1] + currency;
 }
 
-function addAccountDetailList(accountNr){
-  fetch(hostAdress + '/accountDetails?accountNr='+accountNr, {
+function addAccountDetailList(iban){
+  fetch(hostAdress + '/accountDetails/'+iban+"/"+uid, {
     method: 'GET'
   }).then(response => response.json())
     .then(result => {
+      console.log(result);
       var panel = document.getElementById("account_panel");
 
       var detail_template = document.getElementById("account_template");

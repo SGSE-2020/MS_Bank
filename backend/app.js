@@ -38,7 +38,7 @@ gRpcServer.addService(accountProtoPath, 'AccountService');
 
 function transfer (param) {
     param.res = {
-        status: "Ok", 
+        status: "200",  // OK
         user_id: "213",
         lastname: "Husemannn",
         message: "Sie haben Geld an deinen Anderen Benutzer gesendet."
@@ -60,7 +60,7 @@ function createAccount (param) {
 
 function deleteAccount (param) {
     param.res = {
-        status: "OK", 
+        status: "200",   // OK
         message: "Ihr Account wurde gelöscht."
     };
 }
