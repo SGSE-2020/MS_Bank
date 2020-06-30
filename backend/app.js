@@ -45,23 +45,20 @@ function transfer (param) {
     };
 }
 
-function getIban (param) {
-    console.log(param.req.user_id)
-    
-    /*fetch(hostAdress+'/accountList/' + param.req.user_id, {
-        method: 'GET'
-    }).then(response => response.json())
-    .then(result => {
-        console.log(result);
-        
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });*/
+async function getIban (param) {
+    var id = param.req.userId;
+    let db = await mongo_client.connect(DB_URL);
+    let result = await db.db('ms-bank').collection("customer").findOne({user_id: id});   
+    if(result != null) 
+        var iban = result.accounts[0].iban;
+    else 
+        iban = "Keine Konto verfügbar"
 
+    await db.close();
     param.res = {
-        iban: "DE 4545 4544 5454 2555 20"
-    };
+        userId: id,
+        iban: iban
+    }
 }
 
 function createAccount (param) {
