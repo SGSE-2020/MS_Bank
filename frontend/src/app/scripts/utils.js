@@ -66,7 +66,7 @@ function loginUser() {
                             }else{
                                 document.getElementById("createAccountPanel").hidden = false;
                             }
-                        },100)
+                        },500)
                         
                         document.getElementById("signinButton").hidden = true;
                         document.getElementById("signoutButton").hidden = false;
