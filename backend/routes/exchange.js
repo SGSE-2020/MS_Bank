@@ -11,6 +11,7 @@ function mongo_connect(res, callback) {
         if (err) {
             res.status(500).send({'error': err})
             console.error(err)
+            return;
         }
         else {
             callback(err, db.db('ms-bank'))
@@ -29,6 +30,7 @@ router.post('/createTransfer', function(req, res, next) {
     var own_iban = req.body.iban;
     var amount = req.body.amount;
     var start_date = req.body.start_date;
+    var dest_iban = req.body.dest_iban;
 
     if(start_date == undefined){
         var today = new Date();
@@ -36,7 +38,7 @@ router.post('/createTransfer', function(req, res, next) {
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = today.getFullYear();
 
-        start_date = dd + '/' + (mm+1) + '/' + yyyy;
+        start_date = dd + '/' + mm + '/' + yyyy;
     }
 
     var status = true;
@@ -46,19 +48,20 @@ router.post('/createTransfer', function(req, res, next) {
             if (err || result == null) {
                 res.status(404).send({'error': 'Kein Account mit der id: ' + id + ' gefunden'})
                 status = false;
+                return;
             } else {     
                 for (var i in result.accounts){
                     if(result.accounts[i].iban == own_iban){
                         console.log("Account hat zugriff");
                         mongo_connect(res, (err, db) => {
-                            db.collection("customer").update({ "user_id": id, "accounts.iban": own_iban},
+                            db.collection("customer").updateOne({ "user_id": id, "accounts.iban": own_iban},
                                 { $push:
                                    {
                                      "accounts.$.transfer": {
                                         "own_iban": own_iban,
                                         "purpose": req.body.purpose,
                                         "dest_name": req.body.dest_name,
-                                        "dest_iban": req.body.dest_iban,
+                                        "dest_iban": dest_iban,
                                         "amount": "-" + amount,
                                         "start_date": start_date,
                                         "repeats": req.body.repeat  
@@ -66,17 +69,18 @@ router.post('/createTransfer', function(req, res, next) {
                                    }
                                 }
                              )
+                            return;
                         })
 
                         mongo_connect(res, (err, db) => {
-                            db.collection("customer").update({ "user_id": id, "accounts.iban": dest_iban},
+                            db.collection("customer").updateOne({ "user_id": id, "accounts.iban": dest_iban},
                                 { $push:
                                    {
                                      "accounts.$.transfer": {
-                                        "own_iban": own_iban,
+                                        "own_iban": dest_iban,
                                         "purpose": req.body.purpose,
                                         "dest_name": req.body.dest_name,
-                                        "dest_iban": req.body.dest_iban,
+                                        "dest_iban": own_iban,
                                         "amount": amount,
                                         "start_date": start_date,
                                         "repeats": req.body.repeat  
@@ -84,10 +88,68 @@ router.post('/createTransfer', function(req, res, next) {
                                    }
                                 }
                              )
+                            return;
                         })
+
+                        mongo_connect(res, (err, db) => {
+                            db.collection('customer').findOne({user_id: id, "accounts.iban": dest_iban}, (err, result) => {
+                                if (err || result == null) {
+                                    res.status(404).send({'error': 'Kein Account mit der id: ' + id + ' gefunden'})
+                                    status = false;
+                                    return;
+                                } else { 
+                                    for (i in result.accounts){
+                                        if(result.accounts[i].iban == dest_iban)
+                                            var dest_balance = parseFloat(result.accounts[i].balance) + parseFloat(amount);
+                                    }
+
+                                    console.log(dest_balance);
+                                    mongo_connect(res, (err, db) => {
+                                        db.collection("customer").updateOne({ "user_id": id, "accounts.iban": dest_iban},
+                                            { $set:
+                                               {
+                                                 "accounts.$.balance": dest_balance                                              
+                                               }
+                                            }
+                                         )
+                                        return;
+                                    })
+                                 }
+                                return;
+                            })
+                        })
+
+                        mongo_connect(res, (err, db) => {
+                            db.collection('customer').findOne({user_id: id, "accounts.iban": own_iban}, (err, result) => {
+                                if (err || result == null) {
+                                    res.status(404).send({'error': 'Kein Account mit der id: ' + id + ' gefunden'})
+                                    status = false;
+                                    return;
+                                } else { 
+                                    for (i in result.accounts){
+                                        if(result.accounts[i].iban == own_iban)
+                                            var own_balance = parseFloat(result.accounts[i].balance) - parseFloat(amount);
+
+                                    }
+                                    console.log(own_balance);
+
+                                    mongo_connect(res, (err, db) => {
+                                        db.collection("customer").updateOne({ "user_id": id, "accounts.iban": own_iban},
+                                            { $set:
+                                               {
+                                                 "accounts.$.balance": own_balance                                              
+                                               }
+                                            }
+                                         )
+                                        return;
+                                    })
+                                 }
+                                return;
+                            })
+                        })                    
                     }else {
                         counter++;
-                        if(counter == result.accounts.size())
+                        if(counter == result.accounts.length)
                             res.end("Sie haben keinen Zugriff auf das angegebene Konto");
                     }
                 }

@@ -59,6 +59,14 @@ function loginUser() {
                         if(document.getElementById("acc_view") !== null)
                         document.getElementById("acc_view").style = "";
                         addAccountToView();
+                        setTimeout(function(){
+                            console.log(document.getElementById("account_panel").children.length);
+                            if(document.getElementById("account_panel").children.length > 1){
+                                console.log("Lul hidden");
+                                document.getElementById("createAccountPanel").hidden = true;
+                            }
+                        },100)
+                        
                         document.getElementById("signinButton").hidden = true;
                         document.getElementById("signoutButton").hidden = false;
                     } else {

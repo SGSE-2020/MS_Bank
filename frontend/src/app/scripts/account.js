@@ -29,17 +29,17 @@ function addAccountDetailList(iban){
     .then(result => {
       console.log(result);
       var panel = document.getElementById("account_panel");
+      document.getElementById("account_amount").innerHTML = result.balance + currency;
 
       var detail_template = document.getElementById("account_template");
       if(result.transfer != undefined){
         for (var i in result.transfer){
           var new_detail = detail_template.cloneNode(true);
-          var date = new_detail.querySelector("#account_date").children[0].innerHTML;
+          var date = new_detail.querySelector("#account_date").children[0];
           new_detail.hidden = false;
           new_detail.id = "";
 
-          if(date != "")
-            date = dateParser(result.transfer[i].start_date);
+          date.innerHTML = dateParser(result.transfer[i].start_date);
 
           if(result.transfer[i].amount < 0){
             new_detail.querySelector("#account_transfer_amount").children[0].classList.add("negativeAmount");
@@ -68,7 +68,13 @@ function addAccountDetailList(iban){
 }
 
 function dateParser(date){
-  var date_array = date.split(".");
+  var date_array;
+
+  if(date.includes("."))
+    date_array = date.split(".");
+
+  if(date.includes("/"))
+    date_array = date.split("/");
 
   date_string = date_array[0];
   switch(date_array[1]){
@@ -143,48 +149,36 @@ function addAccountToView(){
     .then(result => {
       if(result.error == undefined){
         var panel = document.getElementById("account_panel");
+        if(panel != undefined){
+          for (var i in result){
+            var new_view = document.getElementById("account_view_template").cloneNode(true);
+            new_view.hidden = false;
+            new_view.id="";
 
-        for (var i in result){
-          console.log(result);
-          var new_view = document.getElementById("account_view_template").cloneNode(true);
-          new_view.hidden = false;
-          new_view.id="";
+            new_view.querySelector("#account_description").innerHTML = result[i].description;
+            new_view.querySelector("#account_nr").innerHTML = result[i].iban;
 
-          new_view.querySelector("#account_description").innerHTML = result[i].description;
-          new_view.querySelector("#account_nr").innerHTML = result[i].iban;
-          // Muss noch ersetzt werden.
-          new_view.querySelector("#account_owner").innerHTML = "Fabian Husemann";
-          //
+            if(parseFloat(result[i].balance) < 0){
+              new_view.querySelector("#account_amount").classList.add("negativeAmount");
+            }else {
+              new_view.querySelector("#account_amount").classList.add("positiveAmount");
+            }
+            new_view.querySelector("#account_amount").innerHTML = result[i].balance + currency;
 
-          if(result[i].amount < 0){
-            new_view.querySelector("#account_amount").classList.add("negativeAmount");
-          }else {
-            new_view.querySelector("#account_amount").classList.add("positiveAmount");
+            panel.appendChild(new_view);
           }
-          new_view.querySelector("#account_amount").innerHTML = result[i].balance + currency;
-
-          panel.appendChild(new_view);
+        }else{
+          document.getElementById("createAccountPanel").hidden = false;
+          document.getElementById("account_button").hidden = true;
         }
-      }else{
-        console.log("neu anlegen");
-        document.getElementById("createAccountPanel").hidden = false;
-        document.getElementById("account_button").hidden = true;
       }
-
     })
     .catch(error => {
       console.error('Error:', error);
   });
 }
 
-function choseAccountInSelect(accountNr){
-  selected_account=accountNr;
-  console.log(selected_account);
-}
-
 function createAccount(){
-  console.log("Account erstellen");
-
   var createObject = {};
   createObject["description"] = document.getElementById("new_account_description").value;
   createObject["user_id"] = uid;

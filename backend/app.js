@@ -46,6 +46,7 @@ function transfer (param) {
 }
 
 function getIban (param) {
+    console.log(param.user_id);
     param.res = {
         iban: "DE 4545 4544 5454 2555 20"
     };
