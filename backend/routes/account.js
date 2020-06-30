@@ -131,9 +131,9 @@ router.post('/updateAccount', function(req, res, next) {
 
 
 function getAdvisor(){
-    var advisor_nr = 1;
+    var advisor_id = "inDZ2A0HCIf4nBltWmnLtJOgFRc2";
     // get customer with advisor = null
-    return advisor_nr;
+    return advisor_id;
 }
 
 function getIban(){

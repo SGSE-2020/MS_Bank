@@ -46,7 +46,19 @@ function transfer (param) {
 }
 
 function getIban (param) {
-    console.log(param.user_id);
+    console.log(param.req.user_id)
+    
+    /*fetch(hostAdress+'/accountList/' + param.req.user_id, {
+        method: 'GET'
+    }).then(response => response.json())
+    .then(result => {
+        console.log(result);
+        
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });*/
+
     param.res = {
         iban: "DE 4545 4544 5454 2555 20"
     };

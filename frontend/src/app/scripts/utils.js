@@ -43,7 +43,7 @@ function loginUser() {
                         username = user.displayName
                         token = idToken;
                         document.cookie = 'uid=' + uid + ';'
-
+                        console.log(uid);
                         var login = document.getElementById("loginButton");
                         login.hidden = true;
 
@@ -61,9 +61,10 @@ function loginUser() {
                         addAccountToView();
                         setTimeout(function(){
                             console.log(document.getElementById("account_panel").children.length);
-                            if(document.getElementById("account_panel").children.length > 1){
-                                console.log("Lul hidden");
+                            if(document.getElementById("account_panel").children.length >= 2){
                                 document.getElementById("createAccountPanel").hidden = true;
+                            }else{
+                                document.getElementById("createAccountPanel").hidden = false;
                             }
                         },100)
                         
