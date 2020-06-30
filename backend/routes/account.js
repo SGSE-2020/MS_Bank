@@ -10,6 +10,7 @@ function mongo_connect(res, callback) {
     mongo_client.connect(DB_URL, (err, db) => {
         if (err) {
             res.status(500).send({'error': err})
+            return;
             console.error(err)
         }
         else {
@@ -24,25 +25,23 @@ router.get('/accountList/:uid', function(req, res, next) {
     console.log(id);
     mongo_connect(res, (err, db) => {
         db.collection('customer').findOne({user_id: id}, (err, result) => {
-            console.log("Wo ist der Fucking Fehler");
             if (err || result == null) {
                 console.log("Error?" + err)
                 res.send({'error': 'Kein Account mit der BenutzerID: ' + id})
-            } else {       
-                //res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})
-                console.log(result);  
-                console.log("TransferList "+result.accounts[0].transfer[0].own_iban);      
+                return;
+            } else { 
                 res.send(result.accounts)
+                return;
             }
         })
     })
-    res.end("Ok");
 });
 
 router.get('/removeDB', function(req, res, next) {
     mongo_connect(res, (err, db) => {
         db.collection('customer').remove()
         res.status(200);
+        return;
     })
 });
 
@@ -54,11 +53,16 @@ router.get('/accountDetails/:iban/:uid', function(req, res, next) {
         db.collection('customer').findOne({user_id: uid}, (err, result) => {
             if (err || result == null) {
                 res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})
+                return;
             } else {       
                 //res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})   
                 for (i in result.accounts){
-                    if(result.accounts[i].iban = iban){
+                    console.log("Account "+ i);
+                    console.log(result.accounts[i])
+                    if(result.accounts[i].iban == iban){
+                        console.log(result.accounts[i])
                         res.send(result.accounts[i])
+                        return;
                     }
                 }
                 
@@ -91,12 +95,14 @@ router.post('/createAccount', function(req, res, next) {
         db.collection("customer").insertOne(customer, (err, db_res) => {
             if (err) {
                 res.status(500).send({'error': err})
+                return;
             } else {
                 res.send()
+                return;
             }
         })
     })
-
+   
     res.end("Ihr Account wurde erstellt. Ihre neue IBAN:" + iban);
 });
 
