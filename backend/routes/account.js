@@ -24,8 +24,10 @@ router.get('/accountList/:uid', function(req, res, next) {
     console.log(id);
     mongo_connect(res, (err, db) => {
         db.collection('customer').findOne({user_id: id}, (err, result) => {
+            console.log("Wo ist der Fucking Fehler");
             if (err || result == null) {
-                res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})
+                console.log("Error?" + err)
+                res.send({'error': 'Kein Account mit der BenutzerID: ' + id})
             } else {       
                 //res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})
                 console.log(result);  
@@ -34,6 +36,7 @@ router.get('/accountList/:uid', function(req, res, next) {
             }
         })
     })
+    res.end("Ok");
 });
 
 router.get('/removeDB', function(req, res, next) {
@@ -53,7 +56,12 @@ router.get('/accountDetails/:iban/:uid', function(req, res, next) {
                 res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})
             } else {       
                 //res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})   
-                res.send(result.accounts)
+                for (i in result.accounts){
+                    if(result.accounts[i].iban = iban){
+                        res.send(result.accounts[i])
+                    }
+                }
+                
             }
         })
     })

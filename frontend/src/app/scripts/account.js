@@ -31,29 +31,32 @@ function addAccountDetailList(iban){
       var panel = document.getElementById("account_panel");
 
       var detail_template = document.getElementById("account_template");
-      for (var i in result.list){
-        var new_detail = detail_template.cloneNode(true);
+      if(result.transfer != undefined){
+        for (var i in result.transfer){
+          var new_detail = detail_template.cloneNode(true);
+          var date = new_detail.querySelector("#account_date").children[0].innerHTML;
+          new_detail.hidden = false;
+          new_detail.id = "";
 
-        new_detail.hidden = false;
-        new_detail.id = "";
+          if(date != "")
+            date = dateParser(result.transfer[i].start_date);
 
+          if(result.transfer[i].amount < 0){
+            new_detail.querySelector("#account_transfer_amount").children[0].classList.add("negativeAmount");
+          }else {
+            new_detail.querySelector("#account_transfer_amount").children[0].classList.add("positiveAmount");
+          }
+          new_detail.querySelector("#account_transfer_amount").children[0].innerHTML = result.transfer[i].amount + currency;
 
-        new_detail.querySelector("#account_date").children[0].innerHTML = dateParser(result.list[i].start_date);
+          new_detail.querySelector("#account_description").children[0].innerHTML = result.transfer[i].dest_name;
+          new_detail.querySelector("#account_description").children[2].innerHTML = result.transfer[i].purpose;
 
-        if(result.list[i].amount < 0){
-          new_detail.querySelector("#account_transfer_amount").children[0].classList.add("negativeAmount");
-        }else {
-          new_detail.querySelector("#account_transfer_amount").children[0].classList.add("positiveAmount");
+          panel.appendChild(new_detail);
+          panel.appendChild(document.createElement("hr"));
         }
-        new_detail.querySelector("#account_transfer_amount").children[0].innerHTML = result.list[i].amount + currency;
 
-        new_detail.querySelector("#account_description").children[0].innerHTML = result.list[i].dest_name;
-        new_detail.querySelector("#account_description").children[2].innerHTML = result.list[i].purpose;
-
-        panel.appendChild(new_detail);
-        panel.appendChild(document.createElement("hr"));
+        console.log('Success:', result);
       }
-      console.log('Success:', result);
     })
     .catch(error => {
       console.error('Error:', error);
@@ -115,8 +118,7 @@ function addAccountSelect(){
   json["user_id"] = uid;
   
   fetch(hostAdress+'/accountList/' + uid, {
-    method: 'GET',
-    credentials: "same-origin"
+    method: 'GET'
   }).then(response => response.json())
     .then(result => {
       var select = document.getElementById("account_select");
@@ -134,15 +136,16 @@ function addAccountSelect(){
 }
 
 function addAccountToView(){
+  console.log("Hallo");
   fetch(hostAdress+'/accountList/'+uid, {
-    method: 'GET',
-    credentials: "same-origin"
+    method: 'GET'
   }).then(response => response.json())
     .then(result => {
       if(result.error == undefined){
         var panel = document.getElementById("account_panel");
 
         for (var i in result){
+          console.log(result);
           var new_view = document.getElementById("account_view_template").cloneNode(true);
           new_view.hidden = false;
           new_view.id="";

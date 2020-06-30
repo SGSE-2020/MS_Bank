@@ -28,6 +28,16 @@ router.post('/createTransfer', function(req, res, next) {
     var id = req.body.user_id;
     var own_iban = req.body.iban;
     var amount = req.body.amount;
+    var start_date = req.body.start_date;
+
+    if(start_date == undefined){
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        start_date = dd + '/' + (mm+1) + '/' + yyyy;
+    }
 
     var status = true;
     var counter = 0;
@@ -50,7 +60,7 @@ router.post('/createTransfer', function(req, res, next) {
                                         "dest_name": req.body.dest_name,
                                         "dest_iban": req.body.dest_iban,
                                         "amount": "-" + amount,
-                                        "start_date": req.body.start_date,
+                                        "start_date": start_date,
                                         "repeats": req.body.repeat  
                                      }          
                                    }
@@ -68,7 +78,7 @@ router.post('/createTransfer', function(req, res, next) {
                                         "dest_name": req.body.dest_name,
                                         "dest_iban": req.body.dest_iban,
                                         "amount": amount,
-                                        "start_date": req.body.start_date,
+                                        "start_date": start_date,
                                         "repeats": req.body.repeat  
                                      }          
                                    }
