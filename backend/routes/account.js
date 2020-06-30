@@ -80,7 +80,7 @@ router.post('/createAccount', function(req, res, next) {
         var advisor_id = getAdvisor();
 
     var account = {};
-    account["balance"] = "0";
+    account["balance"] = "1000"; // Neu Kunden Prämie
     account["description"] = account_description;
     account["iban"] = iban;
     account["transfer"] = [];

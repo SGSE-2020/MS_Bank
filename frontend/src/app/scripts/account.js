@@ -194,7 +194,8 @@ function createAccount(){
   }).then(response => response.text()
   ).then(response => {
     console.log(response);
-
+    addAccountToView();
+    document.getElementById("createAccountPanel").hidden = true;
   }).catch((error) => {
     console.error('Error:', error);
   });
