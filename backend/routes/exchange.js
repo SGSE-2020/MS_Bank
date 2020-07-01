@@ -28,7 +28,7 @@ router.post('/createTransfer', function(req, res, next) {
     console.log("CreateTransfer");
     var id = req.body.user_id;
     var own_iban = req.body.iban;
-    var amount = req.body.amount;
+    var amount = req.body.amount.toFixed(2);
     var start_date = req.body.start_date;
     var dest_iban = req.body.dest_iban;
     var dest_uid;
@@ -117,8 +117,10 @@ router.post('/createTransfer', function(req, res, next) {
                                     return;
                                 } else { 
                                     for (i in result.accounts){
-                                        if(result.accounts[i].iban == dest_iban)
+                                        if(result.accounts[i].iban == dest_iban){
                                             var dest_balance = parseFloat(result.accounts[i].balance) + parseFloat(amount);
+                                            dest_balance = dest_balance.toFixed(2);
+                                        }
                                     }
 
                                     console.log(dest_balance);
@@ -145,9 +147,10 @@ router.post('/createTransfer', function(req, res, next) {
                                     return;
                                 } else { 
                                     for (i in result.accounts){
-                                        if(result.accounts[i].iban == own_iban)
+                                        if(result.accounts[i].iban == own_iban){
                                             var own_balance = parseFloat(result.accounts[i].balance) - parseFloat(amount);
-
+                                            own_balance = own_balance.toFixed(2);
+                                        }
                                     }
                                     console.log(own_balance);
 

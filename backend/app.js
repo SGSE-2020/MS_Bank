@@ -40,7 +40,7 @@ async function transfer (param) {
     //console.log(param.req);
     var id = param.req.userId;
     var own_iban = param.req.iban;
-    var amount = param.req.amount;
+    var amount = param.req.amount.toFixed();
     var purpose = param.req.purpose;
     var start_date = param.req.startDate;
     var dest_iban = param.req.destIban;
@@ -76,13 +76,13 @@ async function transfer (param) {
             for(let v in all_result[i].accounts){
                 if(all_result[i].accounts[v].iban == own_iban){
                     check_counter++;
-                    dest_balance = parseFloat(all_result[i].accounts[v].balance) + parseFloat(amount);
+                    dest_balance = (parseFloat(all_result[i].accounts[v].balance) + parseFloat(amount)).toFixed(2);
                 }
                 if(all_result[i].accounts[v].iban == dest_iban){
                     check_counter++;
                     dest_name = all_result[i].accounts[v].description;
                     dest_uid = all_result[i].user_id;
-                    own_balance = parseFloat(all_result[i].accounts[v].balance) - parseFloat(amount);
+                    own_balance = (parseFloat(all_result[i].accounts[v].balance) - parseFloat(amount)).toFxed(2);
                 }
             }
         }

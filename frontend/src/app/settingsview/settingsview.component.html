@@ -1,5 +1,23 @@
 <div class="main_container" style="padding-bottom: 1em ;">
   <div class="header">
-    <label>Einstellungen</label>
+    <label>Einstellungen</label> 
   </div>
+
+  <div>
+    <label>Geld einzahlen</label> 
+    <hr>
+    <p>IBAN:
+      <select name="Konto" id="account_select">
+        <option value="" disabled selected>Bitte auswählen</option>
+      </select>
+    </p>
+
+      <p>Geldbetrag: <input id="add_amount" type="text"> <button onclick="addAmount()">Einzahlen</button></p>
+  </div>
+
+  <hr>
+  <!-- Passwort abfrage -->
+  <p>Unzufrieden mit dem Service? </p><form action="https://bank.dvess.network"><button onclick="removeAccount()" type="submit" value="Portal">Konto löschen</button></form>
+  
+  
 </div>

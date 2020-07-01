@@ -108,8 +108,10 @@ function logoutUser() {
         var logout = document.getElementById("logoutButton");
         logout.hidden = true;
 
-        document.getElementById("signinButton").hidden = false;
-        document.getElementById("signoutButton").hidden = true;
+        if(document.getElementById("signinButton") !== null)
+            document.getElementById("signinButton").hidden = false;
+        if(document.getElementById("signoutButton") !== null)
+            document.getElementById("signoutButton").hidden = true;
 
         if(document.getElementById("login_view") !== null)
           document.getElementById("login_view").style = "";
