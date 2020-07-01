@@ -49,8 +49,7 @@ async function transfer (param) {
     var status = 200;
     var message = "Sie haben Geld an deinen Anderen Benutzer gesendet.";
 
-    if(id == "" || own_iban == ""|| amount == "" || purpose == "" || dest_iban == "" || 
-    id == undefined || own_iban == undefined|| amount == undefined || purpose == undefined || dest_iban == undefined){
+    if(id == "" || own_iban == ""|| amount == "" || purpose == "" || dest_iban == ""){
         status = "404";
         message = "Eine der wichtigen Angaben Fehlt ihre Angaben: ";
     }else{
