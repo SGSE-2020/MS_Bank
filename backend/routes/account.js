@@ -2,7 +2,8 @@ var express = require("express");
 var router = express.Router();
 var fs = require("fs");
 
-const mongo = require('mongodb')
+const mongo = require('mongodb');
+const { parse } = require("path");
 const DB_URL = 'mongodb://localhost'
 const mongo_client = mongo.MongoClient;
 
@@ -147,8 +148,6 @@ router.post('/updateAccount', function(req, res, next) {
     res.end("Ihr Account wurde erstellt. Ihre neue IBAN:" + iban);
 });
 
-
-
 function getAdvisor(){
     var advisor_id = "inDZ2A0HCIf4nBltWmnLtJOgFRc2";
     // get customer with advisor = null
@@ -175,5 +174,74 @@ function getRandomInt(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
 }
+
+router.post('/addAmount', function(req, res, next) {
+    var iban = req.body.iban;
+    var amount = req.body.amount;
+    var uid = req.body.userId;
+
+    var balance;
+    var new_balance;
+
+    var start_date;
+
+    if(start_date == undefined){
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        start_date = dd + '/' + mm + '/' + yyyy;
+    }
+
+    mongo_connect(res, (err, db) => {
+        db.collection('customer').findOne({user_id: uid}, (err, result) => {
+            if (err || result == null) {
+                res.status(404).send({'error': 'Kein Account mit der BenutzerID: ' + id})
+                return;
+            } else {       
+                for(var i in result.accounts){
+                    if(result.accounts[i].iban == iban){
+                        balance = result.accounts[i].balance;
+                    }
+                }
+      
+                new_balance = parseFloat(balance) + parseFloat(amount);
+                new_balance = new_balance.toFixed(2);
+                console.log("neues Kontostand: "+new_balance);
+                mongo_connect(res, (err, db) => {
+                    db.collection("customer").updateOne({ "user_id": uid, "accounts.iban": iban},
+                        { $set:
+                        {
+                            "accounts.$.balance": new_balance                                              
+                        }
+                        }
+                    )
+                    return;
+                })
+
+                mongo_connect(res, (err, db) => {
+                    db.collection("customer").updateOne({ "user_id": uid, "accounts.iban": iban},
+                        { $push:
+                           {
+                             "accounts.$.transfer": {
+                                "own_iban": iban,
+                                "purpose": "Einzahlung",
+                                "dest_name": "Bank",
+                                "dest_iban": iban,
+                                "amount": amount,
+                                "start_date": start_date,
+                                "repeats": ""  
+                             }          
+                           }
+                        }
+                     )
+                    return;
+                })
+                res.end("Ihre Einzahlung war erfolgreich ihr neuer Kontostand:" + new_balance);
+            }
+        })
+    })
+});
 
 module.exports = router;

@@ -2,6 +2,19 @@ var amount_list = [];
 var currency = " €";
 var selected_account = 0;
 
+function addAdvisor(){
+  fetch(hostAdress + '/getAdvisor/inDZ2A0HCIf4nBltWmnLtJOgFRc2', {
+    method: 'GET'
+  }).then(response => {response.json(); console.log(response.json());})
+    .then(result => {
+      console.log(result);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+  });
+
+}
+
 function showAccountDetails(){
   var select = document.getElementById("account_select");
   var panel = document.getElementById("account_panel");
@@ -303,4 +316,50 @@ function createTransfer(createObject){
   }).catch((error) => {
     console.error('Error:', error);
   });
+}
+
+function addAmount(){
+  var amount = document.getElementById("add_amount").value;
+  var select = document.getElementById("account_select");
+  var iban = select.options[select.selectedIndex].value;
+
+  if(amount == "")
+    alert("Es wurde kein Betrag angeben");
+  else if(iban == "Bitte wählen")
+    alert("Es wurde kein Iban angeben");
+  else{
+    var createObject = {};
+    createObject["amount"] = amount;
+    createObject["iban"] = iban;
+    createObject["userId"] = uid;
+
+    fetch(hostAdress + "/addAmount", {
+      method: 'POST', 
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(createObject)
+    }).then(response => response.text()
+    ).then(response => {
+      console.log(response);
+  
+    }).catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+} 
+
+function removeAccount(){
+  fetch(hostAdress + "/remove/"+uid, {
+    method: 'get'
+  }).then(response => response.text()
+  ).then(response => {
+    console.log(response);
+
+  }).catch((error) => {
+    console.error('Error:', error);
+  });
+
+  logoutUser()
 }
