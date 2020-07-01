@@ -36,12 +36,125 @@ const mongo_client = mongo.MongoClient;
 
 gRpcServer.addService(accountProtoPath, 'AccountService');
 
-function transfer (param) {
+async function transfer (param) {
+    //console.log(param.req);
+    var id = param.req.userId;
+    var own_iban = param.req.iban;
+    var amount = param.req.amount;
+    var purpose = param.req.purpose;
+    var start_date = param.req.startDate;
+    var dest_iban = param.req.destIban;
+    var repeat = param.req.repeat;
+
+    if(id == "" || own_iban == ""|| amount == "" || purpose == "" || dest_iban == ""){
+        status = "404";
+        message = "Eine der wichtigen Angaben Fehlt";
+    }else{
+        var dest_name = "";
+        var dest_uid;
+        var dest_balance;
+        var own_balance;
+
+        var status = 200;
+        var message = "Sie haben Geld an deinen Anderen Benutzer gesendet.";
+
+        if(start_date == undefined || start_date == ""){
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+
+            start_date = dd + '/' + mm + '/' + yyyy;
+        }
+
+        let db = await mongo_client.connect(DB_URL);
+
+        let all_result = await db.db('ms-bank').collection("customer").find({}).toArray();
+        console.log(all_result);
+        var check_counter = 0;
+        for(let i in all_result){
+            for(let v in all_result[i].accounts){
+                if(all_result[i].accounts[v].iban == own_iban){
+                    check_counter++;
+                    dest_balance = parseFloat(all_result[i].accounts[v].balance) + parseFloat(amount);
+                }
+                if(all_result[i].accounts[v].iban == dest_iban){
+                    check_counter++;
+                    dest_name = all_result[i].accounts[v].description;
+                    dest_uid = all_result[i].user_id;
+                    own_balance = parseFloat(all_result[i].accounts[v].balance) - parseFloat(amount);
+                }
+            }
+        }
+
+        var counter = 0;
+        if(check_counter == 2){
+            let result = await db.db('ms-bank').collection("customer").findOne({user_id: id});   
+            for (var i in result.accounts){
+                if(result.accounts[i].iban == own_iban){
+                    await db.db('ms-bank').collection("customer").updateOne({ "user_id": id, "accounts.iban": own_iban},
+                    { $push:
+                    {
+                        "accounts.$.transfer": {
+                            "own_iban": own_iban,
+                            "purpose": purpose,
+                            "dest_name": dest_name,
+                            "dest_iban": dest_iban,
+                            "amount": "-" + amount,
+                            "start_date": start_date,
+                            "repeats": repeat  
+                        }          
+                    }});
+
+                    await db.db('ms-bank').collection("customer").updateOne({ "user_id": dest_uid, "accounts.iban": dest_iban},
+                    { $push:
+                        {
+                            "accounts.$.transfer": {
+                            "own_iban": dest_iban,
+                            "purpose": purpose,
+                            "dest_name": dest_name,
+                            "dest_iban": own_iban,
+                            "amount": amount,
+                            "start_date": start_date,
+                            "repeats": repeat  
+                            }          
+                        }});        
+
+                    await db.db('ms-bank').collection("customer").updateOne({ "user_id": dest_uid, "accounts.iban": dest_iban},
+                    { $set:
+                        {
+                                "accounts.$.balance": dest_balance                                              
+                        }
+                    });
+                    
+                    await db.db('ms-bank').collection("customer").updateOne({ "user_id": id, "accounts.iban": own_iban},
+                    { $set:
+                        {
+                            "accounts.$.balance": own_balance                                              
+                        }
+                    });           
+                }else {
+                    console.log(result.accounts[i].iban + "==" +own_iban)
+                    console.log(counter + "==" + result.accounts.length);
+                    counter++;
+                    if(counter == result.accounts.length){
+                        message = "Der User hat keinen Zugriff auf das angegebene Konto";
+                        status = 404;
+                    }
+                }
+            }
+        }else{
+            status = 404 // Eine der Ibannummern wurde falsch angegeben.
+            message = "Eine der Ibannummern wurde falsch angegeben."
+        }
+        
+        await db.close();
+    }
     param.res = {
-        status: "200",  // OK
-        user_id: "213",
-        lastname: "Husemannn",
-        message: "Sie haben Geld an deinen Anderen Benutzer gesendet."
+        status: status,  // OK
+        user_id: id,
+        lastname: "Husemann",
+        message: message
     };
 }
 

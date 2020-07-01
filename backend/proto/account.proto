@@ -23,8 +23,8 @@ message Account {
 }
 
 message transferMessage {
-	string status = 1;
-	string user_id = 2;
+	string status = 1;		// 200 Ok, 400 Kein Konto, 401 Iban falsch
+	string user_id = 2;	
 	string lastname = 3;
     string message = 5;
 }
