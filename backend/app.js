@@ -49,7 +49,8 @@ async function transfer (param) {
     var status = 200;
     var message = "Sie haben Geld an deinen Anderen Benutzer gesendet.";
 
-    if(id == "" || own_iban == ""|| amount == "" || purpose == "" || dest_iban == ""){
+    if(id == "" || own_iban == ""|| amount == "" || purpose == "" || dest_iban == "" || 
+    id == undefined || own_iban == undefined|| amount == undefined || purpose == undefined || dest_iban == undefined){
         status = "404";
         message = "Eine der wichtigen Angaben Fehlt";
     }else{
@@ -143,7 +144,7 @@ async function transfer (param) {
                     }
                 }
             }
-        }else{
+        }else{NqDh0ZKMVwXyVBgowVa088QKr7I2
             status = 404 // Eine der Ibannummern wurde falsch angegeben.
             message = "Eine der Ibannummern wurde falsch angegeben."
         }
@@ -165,7 +166,10 @@ async function getIban (param) {
     let result = await db.db('ms-bank').collection("customer").findOne({user_id: id});
     var iban;
 
-    iban = result.accounts[0].iban;
+    if(result != null) 
+        iban = result.accounts[0].iban;
+    else 
+        iban = "Keine Konto verfügbar"
 
     await db.close();
     param.res = {
