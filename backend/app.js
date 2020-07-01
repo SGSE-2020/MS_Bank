@@ -169,7 +169,7 @@ async function getIban (param) {
     if(result != null) 
         iban = result.accounts[0].iban;
     else 
-        iban = "Keine Konto verfügbar"
+        iban = "Keine Konto verfügbar eingabe:" + id
 
     await db.close();
     param.res = {
