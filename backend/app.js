@@ -70,7 +70,7 @@ async function transfer (param) {
         let db = await mongo_client.connect(DB_URL);
 
         let all_result = await db.db('ms-bank').collection("customer").find({}).toArray();
-        console.log(all_result);
+        //console.log(all_result);
         var check_counter = 0;
         for(let i in all_result){
             for(let v in all_result[i].accounts){
@@ -150,7 +150,7 @@ async function transfer (param) {
         
         await db.close();
     }
-    
+
     param.res = {
         status: status,  // OK
         user_id: id,

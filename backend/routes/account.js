@@ -46,6 +46,14 @@ router.get('/removeDB', function(req, res, next) {
     })
 });
 
+router.get('/db', (req, res) => {
+    mongo_connect(res, (err, db) => {
+        db.collection("customer").find({}).toArray((err, result) => {
+            res.send(result)
+        })
+    })
+})
+
 router.get('/accountDetails/:iban/:uid', function(req, res, next) {
     var iban = req.params.iban;
     var uid = req.params.uid;
