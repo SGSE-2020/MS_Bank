@@ -49,10 +49,9 @@ async function transfer (param) {
     var status = 200;
     var message = "Sie haben Geld an deinen Anderen Benutzer gesendet.";
 
-    if(id == "" || own_iban == ""|| amount == "" || purpose == "" || dest_iban == "" || 
-    id == undefined || own_iban == undefined|| amount == undefined || purpose == undefined || dest_iban == undefined){
+    if(id == "" || own_iban == ""|| amount == "" || purpose == "" || dest_iban == ""){
         status = "404";
-        message = "Eine der wichtigen Angaben Fehlt";
+        message = "Eine der wichtigen Angaben Fehlt ihre Angaben: ";
     }else{
         var dest_name = "";
         var dest_uid;
@@ -154,7 +153,7 @@ async function transfer (param) {
 
     param.res = {
         status: status,  // OK
-        user_id: id,
+        userId: id,
         lastname: "Husemann",
         message: message
     };
@@ -165,16 +164,20 @@ async function getIban (param) {
     let db = await mongo_client.connect(DB_URL);
     let result = await db.db('ms-bank').collection("customer").findOne({user_id: id});
     var iban;
+    var status_msg;
 
-    if(result != null) 
+    if(result != null){
         iban = result.accounts[0].iban;
-    else 
-        iban = "Keine Konto verfügbar eingabe:" + id
+        status_msg = "Konto gefunden";
+    }else {
+        status_msg = "Keine Konto verfügbar eingabe:" + id;
+    }
 
     await db.close();
     param.res = {
         userId: id,
-        iban: iban
+        iban: iban,
+        status: status_msg
     }
 }
 
