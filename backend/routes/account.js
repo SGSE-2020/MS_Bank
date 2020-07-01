@@ -46,6 +46,16 @@ router.get('/removeDB', function(req, res, next) {
     })
 });
 
+router.get('/remove/:uid', function(req, res, next) {
+    var id = req.params.uid;
+
+    mongo_connect(res, (err, db) => {
+        db.collection('customer').remove({user_id: id})
+        res.status(200);
+        return;
+    })
+});
+
 router.get('/db', (req, res) => {
     mongo_connect(res, (err, db) => {
         db.collection("customer").find({}).toArray((err, result) => {
