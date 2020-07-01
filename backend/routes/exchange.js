@@ -32,7 +32,7 @@ router.post('/createTransfer', function(req, res, next) {
     var start_date = req.body.start_date;
     var dest_iban = req.body.dest_iban;
     var dest_uid;
-    
+
     if(start_date == undefined){
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -42,7 +42,7 @@ router.post('/createTransfer', function(req, res, next) {
         start_date = dd + '/' + mm + '/' + yyyy;
     }
 
-    let all_result = await db.db('ms-bank').collection("customer").find({}).toArray();
+    let all_result = db.db('ms-bank').collection("customer").find({}).toArray();
     console.log(all_result);
     var check_counter = 0;
     for(let i in all_result){

@@ -34,6 +34,7 @@ router.get('/accountList/:uid', function(req, res, next) {
                 return;
             }
         })
+        return;
     })
 });
 
