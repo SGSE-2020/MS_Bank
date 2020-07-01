@@ -162,11 +162,10 @@ async function transfer (param) {
 async function getIban (param) {
     var id = param.req.userId;
     let db = await mongo_client.connect(DB_URL);
-    let result = await db.db('ms-bank').collection("customer").findOne({user_id: id});   
-    if(result != null) 
-        var iban = result.accounts[0].iban;
-    else 
-        iban = "Keine Konto verfügbar"
+    let result = await db.db('ms-bank').collection("customer").findOne({user_id: id});
+    var iban;
+
+    iban = result.accounts[0].iban;
 
     await db.close();
     param.res = {
