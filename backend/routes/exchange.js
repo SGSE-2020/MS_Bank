@@ -31,7 +31,8 @@ router.post('/createTransfer', function(req, res, next) {
     var amount = req.body.amount;
     var start_date = req.body.start_date;
     var dest_iban = req.body.dest_iban;
-
+    var dest_uid;
+    
     if(start_date == undefined){
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -39,6 +40,23 @@ router.post('/createTransfer', function(req, res, next) {
         var yyyy = today.getFullYear();
 
         start_date = dd + '/' + mm + '/' + yyyy;
+    }
+
+    let all_result = await db.db('ms-bank').collection("customer").find({}).toArray();
+    console.log(all_result);
+    var check_counter = 0;
+    for(let i in all_result){
+        for(let v in all_result[i].accounts){
+            if(all_result[i].accounts[v].iban == own_iban){
+                check_counter++;
+                dest_balance = parseFloat(all_result[i].accounts[v].balance) + parseFloat(amount);
+            }
+            if(all_result[i].accounts[v].iban == dest_iban){
+                check_counter++;
+                dest_uid = all_result[i].user_id;
+                own_balance = parseFloat(all_result[i].accounts[v].balance) - parseFloat(amount);
+            }
+        }
     }
 
     var status = true;

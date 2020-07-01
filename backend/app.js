@@ -46,6 +46,9 @@ async function transfer (param) {
     var dest_iban = param.req.destIban;
     var repeat = param.req.repeat;
 
+    var status = 200;
+    var message = "Sie haben Geld an deinen Anderen Benutzer gesendet.";
+
     if(id == "" || own_iban == ""|| amount == "" || purpose == "" || dest_iban == ""){
         status = "404";
         message = "Eine der wichtigen Angaben Fehlt";
@@ -54,9 +57,6 @@ async function transfer (param) {
         var dest_uid;
         var dest_balance;
         var own_balance;
-
-        var status = 200;
-        var message = "Sie haben Geld an deinen Anderen Benutzer gesendet.";
 
         if(start_date == undefined || start_date == ""){
             var today = new Date();
@@ -150,6 +150,7 @@ async function transfer (param) {
         
         await db.close();
     }
+    
     param.res = {
         status: status,  // OK
         user_id: id,
