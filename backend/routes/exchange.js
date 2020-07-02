@@ -28,7 +28,7 @@ router.post('/createTransfer', function(req, res, next) {
     console.log("CreateTransfer");
     var id = req.body.user_id;
     var own_iban = req.body.iban;
-    var amount = req.body.amount.toFixed(2);
+    var amount = parseFloat(req.body.amount).toFixed(2);
     var start_date = req.body.start_date;
     var dest_iban = req.body.dest_iban;
     var dest_uid;
