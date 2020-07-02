@@ -75,20 +75,22 @@ async function transfer (param) {
         for(let i in all_result){
             for(let v in all_result[i].accounts){
                 if(all_result[i].accounts[v].iban == own_iban){
+                    console.log("own_iban found");
                     check_counter++;
                     dest_balance = (parseFloat(all_result[i].accounts[v].balance) + parseFloat(amount)).toFixed(2);
-                }
-                if(all_result[i].accounts[v].iban == dest_iban){
+                }else if(all_result[i].accounts[v].iban == dest_iban){
+                    console.log("dest_iban found");
                     check_counter++;
                     dest_name = all_result[i].accounts[v].description;
                     dest_uid = all_result[i].user_id;
-                    own_balance = (parseFloat(all_result[i].accounts[v].balance) - parseFloat(amount)).toFxed(2);
+                    own_balance = parseFloat(all_result[i].accounts[v].balance) - parseFloat(amount)
+                    own_balance = parseFloat(own_balance).toFixed(2);
                 }
             }
         }
-
         var counter = 0;
         if(check_counter == 2){
+            
             let result = await db.db('ms-bank').collection("customer").findOne({user_id: id});   
             for (var i in result.accounts){
                 if(result.accounts[i].iban == own_iban){
@@ -143,8 +145,8 @@ async function transfer (param) {
                     }
                 }
             }
-        }else{NqDh0ZKMVwXyVBgowVa088QKr7I2
-            status = 404 // Eine der Ibannummern wurde falsch angegeben.
+        }else{
+            status = 404 // Eicontainerne der Ibannummern wurde falsch angegeben.
             message = "Eine der Ibannummern wurde falsch angegeben."
         }
         
