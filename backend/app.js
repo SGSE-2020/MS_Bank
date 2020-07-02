@@ -40,7 +40,7 @@ async function transfer (param) {
     //console.log(param.req);
     var id = param.req.userId;
     var own_iban = param.req.iban;
-    var amount = param.req.amount.toFixed();
+    var amount = parseFloat(param.req.amount).toFixed();
     var purpose = param.req.purpose;
     var start_date = param.req.startDate;
     var dest_iban = param.req.destIban;
