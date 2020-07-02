@@ -77,13 +77,13 @@ async function transfer (param) {
                 if(all_result[i].accounts[v].iban == own_iban){
                     console.log("own_iban found");
                     check_counter++;
-                    own_balance = (parseFloat(all_result[i].accounts[v].balance) + parseFloat(amount)).toFixed(2);
+                    own_balance = (parseFloat(all_result[i].accounts[v].balance) - parseFloat(amount)).toFixed(2);
                 }else if(all_result[i].accounts[v].iban == dest_iban){
                     console.log("dest_iban found");
                     check_counter++;
                     dest_name = all_result[i].accounts[v].description;
                     dest_uid = all_result[i].user_id;
-                    dest_balance = parseFloat(all_result[i].accounts[v].balance) - parseFloat(amount)
+                    dest_balance = parseFloat(all_result[i].accounts[v].balance) + parseFloat(amount)
                     dest_balance = parseFloat(dest_balance).toFixed(2);
                 }
             }
