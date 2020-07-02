@@ -42,23 +42,6 @@ router.post('/createTransfer', function(req, res, next) {
         start_date = dd + '/' + mm + '/' + yyyy;
     }
 
-    let all_result = db.db('ms-bank').collection("customer").find({}).toArray();
-    console.log(all_result);
-    var check_counter = 0;
-    for(let i in all_result){
-        for(let v in all_result[i].accounts){
-            if(all_result[i].accounts[v].iban == own_iban){
-                check_counter++;
-                dest_balance = parseFloat(all_result[i].accounts[v].balance) + parseFloat(amount);
-            }
-            if(all_result[i].accounts[v].iban == dest_iban){
-                check_counter++;
-                dest_uid = all_result[i].user_id;
-                own_balance = parseFloat(all_result[i].accounts[v].balance) - parseFloat(amount);
-            }
-        }
-    }
-
     var status = true;
     var counter = 0;
     mongo_connect(res, (err, db) => {
@@ -91,7 +74,7 @@ router.post('/createTransfer', function(req, res, next) {
                         })
 
                         mongo_connect(res, (err, db) => {
-                            db.collection("customer").updateOne({ "user_id": id, "accounts.iban": dest_iban},
+                            db.collection("customer").updateOne({"accounts.iban": dest_iban},
                                 { $push:
                                    {
                                      "accounts.$.transfer": {
@@ -110,7 +93,7 @@ router.post('/createTransfer', function(req, res, next) {
                         })
 
                         mongo_connect(res, (err, db) => {
-                            db.collection('customer').findOne({user_id: id, "accounts.iban": dest_iban}, (err, result) => {
+                            db.collection('customer').findOne({"accounts.iban": dest_iban}, (err, result) => {
                                 if (err || result == null) {
                                     res.status(404).send({'error': 'Kein Account mit der id: ' + id + ' gefunden'})
                                     status = false;
@@ -118,6 +101,8 @@ router.post('/createTransfer', function(req, res, next) {
                                 } else { 
                                     for (i in result.accounts){
                                         if(result.accounts[i].iban == dest_iban){
+                                            console.log("Test");
+                                            console.log(result.accounts[i]);
                                             var dest_balance = parseFloat(result.accounts[i].balance) + parseFloat(amount);
                                             dest_balance = dest_balance.toFixed(2);
                                         }
@@ -125,7 +110,7 @@ router.post('/createTransfer', function(req, res, next) {
 
                                     console.log(dest_balance);
                                     mongo_connect(res, (err, db) => {
-                                        db.collection("customer").updateOne({ "user_id": id, "accounts.iban": dest_iban},
+                                        db.collection("customer").updateOne({"accounts.iban": dest_iban},
                                             { $set:
                                                {
                                                  "accounts.$.balance": dest_balance                                              
@@ -178,8 +163,10 @@ router.post('/createTransfer', function(req, res, next) {
         })
     })
 
-    if(status)
+    if(status){
         res.end("Die Überweisung war erfolgreich.");
+        return
+    }
 });
 
 module.exports = router;
