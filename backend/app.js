@@ -102,7 +102,7 @@ async function transfer (param) {
                             "purpose": purpose,
                             "dest_name": dest_name,
                             "dest_iban": dest_iban,
-                            "amount": "-" + amount,
+                            "amount": "-" + amount.toString(),
                             "start_date": start_date,
                             "repeats": repeat  
                         }          
@@ -116,7 +116,7 @@ async function transfer (param) {
                             "purpose": purpose,
                             "dest_name": dest_name,
                             "dest_iban": own_iban,
-                            "amount": amount,
+                            "amount": amount.toString(),
                             "start_date": start_date,
                             "repeats": repeat  
                             }          
